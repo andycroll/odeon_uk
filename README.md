@@ -1,6 +1,6 @@
 # OdeonUk
 
-TODO: Write a gem description
+A simple gem to parse the (Odeon UK website)[http://odeon.co.uk] and spit out useful formatted info.
 
 ## Installation
 
