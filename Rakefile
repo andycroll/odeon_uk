@@ -9,4 +9,12 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+task :build do
+  system "gem build odeon_uk.gemspec"
+end
+
+task :release => :build do
+  system "gem push odeon_uk-#{OdeonUk::VERSION}"
+end
+
 task :default => :test
