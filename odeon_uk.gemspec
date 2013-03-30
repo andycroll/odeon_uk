@@ -18,5 +18,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.version       = OdeonUk::VERSION
+
+  gem.add_development_dependency 'fakeweb'
   gem.add_development_dependency 'rake'
+
+  gem.add_runtime_dependency 'httparty'
 end
