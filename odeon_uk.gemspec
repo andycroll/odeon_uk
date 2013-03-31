@@ -19,8 +19,8 @@ Gem::Specification.new do |gem|
 
   gem.version       = OdeonUk::VERSION
 
-  gem.add_development_dependency 'fakeweb'
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'webmock'
 
   gem.add_runtime_dependency 'httparty'
 end
