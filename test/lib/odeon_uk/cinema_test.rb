@@ -28,6 +28,17 @@ describe OdeonUk::Cinema do
       subject.size.must_equal 23
     end
   end
+
+  describe '#find(id_string)' do
+    let(:id_string) { 's20' }
+
+    subject { OdeonUk::Cinema.find(id_string) }
+  end
+
+  describe '#find_by_name(name)' do
+    let(:name) { 'Tunbridge Wells' }
+
+    subject { OdeonUk::Cinema.find_by_name(name) }
   end
 
 end

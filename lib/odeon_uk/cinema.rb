@@ -16,6 +16,23 @@ module OdeonUk
       [{}, {}]
     end
 
+    # Public: Return single cinema information for an Odeon cinema
+    #
+    # id_string - a string representing the cinema id
+    #             of the format 's000' as used on the odeon.co.uk website
+    #
+    # Examples
+    #
+    #   OdeonUk::Cinema.find('s23')
+    #   # => {:name => 'IMAX', :id => 's23'}
+    #
+    # Returns a hash of cinema information.
+    def self.find(id_string)
+      # return nil unless id_string.match(/^s\d+$/)
+      sitemap_response
+      { name: 'Bristol', id: 's30' }
+    end
+
     private
 
     def self.sitemap_response
