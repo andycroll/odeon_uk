@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'webmock'
 
   gem.add_runtime_dependency 'httparty'
+  gem.add_runtime_dependency 'nokogiri'
 end
