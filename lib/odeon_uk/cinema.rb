@@ -1,7 +1,16 @@
 require 'httparty'
+require 'nokogiri'
+require 'pp'
 
 module OdeonUk
   class Cinema
+
+    def initialize(id, name, url)
+      @id   = id
+      @name = name
+      @slug = name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
+      @url  = url
+    end
 
     # Public: Return basic cinema information for all Odeon cinemas
     #
@@ -12,8 +21,16 @@ module OdeonUk
     #
     # Returns an array of hashes of cinema information.
     def self.all
-      sitemap_response
-      [{}, {}]
+      doc.css('.sitemap > .span12:nth-child(4) li a').map do |link|
+        href = link.get_attribute('href')
+        name = link.children.first.to_s
+
+        if id = href.match(/\/(\d+)\/$/)
+          new(id[1].to_i, name, href)
+        else
+          nil
+        end
+      end.compact
     end
 
     # Public: Return single cinema information for an Odeon cinema
@@ -35,8 +52,12 @@ module OdeonUk
 
     private
 
+    def self.doc
+      Nokogiri::HTML(sitemap_response)
+    end
+
     def self.sitemap_response
-      @sitemap_response ||= HTTParty.get('http://www.odeon.co.uk/fanatic/sitemap/')
+      @sitemap_response ||= HTTParty.get('http://www.odeon.co.uk/sitemap/')
     end
 
   end
