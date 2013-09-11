@@ -20,7 +20,58 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Cinema
+
+``` ruby
+$ OdeonUk::Cinema.all
+#=> [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" chain_id="23" url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
+
+OdeonUk::Cinema.find_by_id('71')
+#=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" address="..." chain_id="71" url="...">
+
+OdeonUk::Cinema.find_by_id(71)
+#=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" address="..." chain_id="71" url="...">
+
+cinema = OdeonUk::Cinema.find_by_slug('odeon-brighton')
+#=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">
+
+cinema.brand
+#=> 'Odeon'
+
+cinema.chain_id
+#=> '71'
+
+cinema.url
+#=> "http://www.odeon.co.uk/cinemas/brighton/71/"
+
+cinema.films
+#=> [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek: Into Darkness">]
+
+cinema.showing_film? 'Iron Man 3'
+#=> true
+
+cinema.showing_film? 'Batman & Robin'
+#=> false
+
+cinema.screenings_of 'Iron Man 3'
+#=> [<OdeonUk::Screening film="Iron Man 3" date="2013-09-09" time="11:00" varient="3d">, <OdeonUk::Screening film="Iron Man 3" date="2013-09-09" time="13:50" varient="kids">]
+```
+
+### Film
+
+``` ruby
+OdeonUk::Film.all
+#=> [<OdeonUk::Film name="Iron Man 3" slug="iron-man-3">, <OdeonUk::Film name="Star Trek Into Darkness" slug="star-trek-into-darkness">, <OdeonUk::Film name="Captain America: The First Avenger" slug="captain-america-the-first-avenger">, <OdeonUk::Film name="Thor: The Dark World" slug="thor-the-dark-world">]
+
+film = OdeonUk::Film.find_by_name 'Iron Man 3'
+#=> <OdeonUk::Film name="Iron Man 3" slug="iron-man-3">
+
+film.screenings_at 'Odeon Brighton'
+#=> [<OdeonUk::Screening film="Iron Man 3" date="2013-09-09" time="11:00" varient="3d">, <OdeonUk::Screening film="Iron Man 3" date="2013-09-09" time="13:50" varient="kids">]
+
+film.screenings_at 71
+#=> [<OdeonUk::Screening film="Iron Man 3" date="2013-09-09" time="11:00" varient="3d">, <OdeonUk::Screening film="Iron Man 3" date="2013-09-09" time="13:50" varient="kids">]
+```
 
 ## Contributing
 
