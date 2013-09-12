@@ -23,7 +23,7 @@ Or install it yourself as:
 ### Cinema
 
 ``` ruby
-$ OdeonUk::Cinema.all
+OdeonUk::Cinema.all
 #=> [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" chain_id="23" url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
 
 OdeonUk::Cinema.find_by_id('71')

@@ -3,16 +3,32 @@ require 'nokogiri'
 require 'pp'
 
 module OdeonUk
+
+  # Public: The object representing a cinema on the Odeon UK website
   class Cinema
 
-    attr_reader :id, :name, :slug, :url
+    # Public: Returns the String brand of the cinema #=> 'Odeon'
+    attr_reader :brand
+    # Public: Returns the Integer id of the cinema on teh odeon website
+    attr_reader :id
+    # Public: Returns the String name of the cinema
+    attr_reader :name
+    # Public: Returns the String slug of the cinema
+    attr_reader :slug
+    # Public: Returns the String url of the cinema's page on odeon.co.uk
+    attr_reader :url
 
+    # Public: Initialize a cinema
+    #
+    # id   - Integer/String of the cinema on the odeon website
+    # name - String of cinema name
+    # url  - String of cinema url on the odeon website
     def initialize(id, name, url)
-      @id   = id.to_i
-      @name = name
-      @slug = name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
-      built_url = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
-      @url  = built_url
+      @brand = 'Odeon'
+      @id    = id.to_i
+      @name  = name
+      @slug  = name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
+      @url   = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
     end
 
     # Public: Return basic cinema information for all Odeon cinemas
@@ -20,11 +36,11 @@ module OdeonUk
     # Examples
     #
     #   OdeonUk::Cinema.all
-    #   # => [{:name => 'IMAX', :id => 's201'}, {:name => 'Tunbridge Wells', :id => 's23'}]
+    #   # => [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" id=23 url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
     #
     # Returns an array of hashes of cinema information.
     def self.all
-      doc.css('.sitemap > .span12:nth-child(4) li a').map do |link|
+      parsed_sitemap.css('.sitemap > .span12:nth-child(4) li a').map do |link|
         href = link.get_attribute('href')
         name = link.children.first.to_s
 
@@ -38,24 +54,26 @@ module OdeonUk
 
     # Public: Return single cinema information for an Odeon cinema
     #
-    # id_string - a string representing the cinema id
-    #             of the format 's000' as used on the odeon.co.uk website
+    # id_string - a string/int representing the cinema id
+    #             of the format '32'/32 as used on the odeon.co.uk website
     #
     # Examples
     #
-    #   OdeonUk::Cinema.find('s23')
-    #   # => {:name => 'IMAX', :id => 's23'}
+    #   OdeonUk::Cinema.find('71')
+    #   # => <OdeonUk::Cinema brand="Odeon" name="Brighton" slug="brighton" id=71 url="...">
     #
-    # Returns a hash of cinema information.
-    def self.find(id_string)
-      # return nil unless id_string.match(/^s\d+$/)
-      sitemap_response
-      { name: 'Bristol', id: 's30' }
+    # Returns an Odeon::Cinema or nil if none was found
+    def self.find(id)
+      id = id.to_i
+      return nil unless id > 0
+
+      parsed_response
+      new(id, name, href)
     end
 
     private
 
-    def self.doc
+    def self.parsed_sitemap
       Nokogiri::HTML(sitemap_response)
     end
 

@@ -45,6 +45,7 @@ describe OdeonUk::Cinema do
     it 'stores id, name, slug and url' do
       cinema = OdeonUk::Cinema.new '23', 'Brighton & Hove', '/cinema/brighton/23/'
       cinema.id.must_equal 23
+      cinema.brand.must_equal 'Odeon'
       cinema.name.must_equal 'Brighton & Hove'
       cinema.slug.must_equal 'brighton-hove'
       cinema.url.must_equal 'http://www.odeon.co.uk/cinema/brighton/23/'
