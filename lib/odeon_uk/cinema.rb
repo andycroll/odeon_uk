@@ -5,11 +5,14 @@ require 'pp'
 module OdeonUk
   class Cinema
 
+    attr_reader :id, :name, :slug, :url
+
     def initialize(id, name, url)
-      @id   = id
+      @id   = id.to_i
       @name = name
       @slug = name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
-      @url  = url
+      built_url = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
+      @url  = built_url
     end
 
     # Public: Return basic cinema information for all Odeon cinemas
