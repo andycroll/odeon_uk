@@ -41,11 +41,8 @@ module OdeonUk
     # Returns an array of hashes of cinema information.
     def self.all
       parsed_sitemap.css('.sitemap > .span12:nth-child(4) li a').map do |link|
-        href = link.get_attribute('href')
-        name = link.children.first.to_s
-
-        if id = href.match(/\/(\d+)\/$/)
-          new(id[1].to_i, name, href)
+        if link.get_attribute('href').match(/\/(\d+)\/$/)
+          new_from_link link
         else
           nil
         end
@@ -67,11 +64,23 @@ module OdeonUk
       id = id.to_i
       return nil unless id > 0
 
-      parsed_response
-      new(id, name, href)
+      parsed_sitemap.css('.sitemap > .span12:nth-child(4) li a').map do |link|
+        if link.get_attribute('href').match(/\/#{id}\/$/)
+          new_from_link link
+        else
+          nil
+        end
+      end.compact.first
     end
 
     private
+
+    def self.new_from_link(link)
+      url  = link.get_attribute('href')
+      id   = url.match(/\/(\d+)\/$/)[1]
+      name = link.children.first.to_s
+      new id, name, url
+    end
 
     def self.parsed_sitemap
       Nokogiri::HTML(sitemap_response)
