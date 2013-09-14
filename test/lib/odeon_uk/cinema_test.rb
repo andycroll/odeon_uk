@@ -12,7 +12,7 @@ describe OdeonUk::Cinema do
       stub_request(:get, 'http://www.odeon.co.uk/sitemap/').to_return( status: 200, body: sitemap_body, headers: {} )
     end
 
-    it 'returns a list of symbols' do
+    it 'returns an Array of Odeon::Cinemas' do
       subject.must_be_instance_of(Array)
       subject.each do |value|
         value.must_be_instance_of(OdeonUk::Cinema)
