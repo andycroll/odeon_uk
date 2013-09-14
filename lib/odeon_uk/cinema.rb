@@ -40,13 +40,9 @@ module OdeonUk
     #
     # Returns an array of hashes of cinema information.
     def self.all
-      parsed_sitemap.css('.sitemap > .span12:nth-child(4) li a').map do |link|
-        if link.get_attribute('href').match(/\/(\d+)\/$/)
-          new_from_link link
-        else
-          nil
-        end
-      end.compact
+      cinema_links.map do |link|
+        new_from_link link
+      end
     end
 
     # Public: Return single cinema information for an Odeon cinema
@@ -64,16 +60,15 @@ module OdeonUk
       id = id.to_i
       return nil unless id > 0
 
-      parsed_sitemap.css('.sitemap > .span12:nth-child(4) li a').map do |link|
-        if link.get_attribute('href').match(/\/#{id}\/$/)
-          new_from_link link
-        else
-          nil
-        end
-      end.compact.first
+      all.select { |cinema| cinema.id == id }[0]
     end
 
     private
+
+    def self.cinema_links
+      links = parsed_sitemap.css('.sitemap > .span12:nth-child(4) a[href*=cinemas]')
+      links.select { |link| link.get_attribute('href').match(/\/\d+\/$/) }
+    end
 
     def self.new_from_link(link)
       url  = link.get_attribute('href')
