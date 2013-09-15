@@ -1,7 +1,3 @@
-require 'httparty'
-require 'nokogiri'
-require 'pp'
-
 module OdeonUk
 
   # Public: The object representing a cinema on the Odeon UK website
