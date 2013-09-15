@@ -59,6 +59,19 @@ module OdeonUk
       all.select { |cinema| cinema.id == id }[0]
     end
 
+    # Public: Returns films for an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.films
+    #   # => [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek Into Darkness">]
+    #
+    # Returns an array of Odeon::Film objects
+    def films
+      parsed_showtimes.css('.film-detail .film .presentation-info h4 a').map { |link| OdeonUk::Film.new link.children.first.to_s }
+    end
+
     private
 
     def self.cinema_links
@@ -81,5 +94,16 @@ module OdeonUk
       @sitemap_response ||= HTTParty.get('http://www.odeon.co.uk/sitemap/')
     end
 
+    def cinema_response
+      @sinema_response ||= HTTParty.get(@url)
+    end
+
+    def parsed_showtimes
+      Nokogiri::HTML(showtimes_response)
+    end
+
+    def showtimes_response
+      @showtimes_response ||= HTTParty.get("http://www.odeon.co.uk/showtimes/week/#{@id}?siteId=#{@id}")
+    end
   end
 end

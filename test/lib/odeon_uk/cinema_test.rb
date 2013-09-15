@@ -65,4 +65,30 @@ describe OdeonUk::Cinema do
     end
   end
 
+  describe '#films' do
+    let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton & Hove', '/cinemas/brighton/71/') }
+    subject { cinema.films }
+
+    before do
+      brighton_screenings_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton-showtimes.html') )
+      stub_request(:get, 'http://www.odeon.co.uk/showtimes/week/71?siteId=71').to_return( status: 200, body: brighton_screenings_body, headers: {} )
+    end
+
+    it 'returns an array of films' do
+      subject.must_be_instance_of(Array)
+      subject.each do |item|
+        item.must_be_instance_of(OdeonUk::Film)
+      end
+    end
+
+    it 'returns correct number of films' do
+      subject.count.must_equal 17
+    end
+
+    it 'returns film objects with correct names' do
+      subject.first.name.must_equal 'About Time'
+      subject.last.name.must_equal 'White House Down'
+    end
+  end
+
 end
