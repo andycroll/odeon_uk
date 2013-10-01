@@ -69,7 +69,10 @@ module OdeonUk
     #
     # Returns an array of Odeon::Film objects
     def films
-      parsed_showtimes.css('.film-detail .film .presentation-info h4 a').map { |link| OdeonUk::Film.new link.children.first.to_s }
+      film_nodes.map do |node|
+        parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
+        OdeonUk::Film.new parser.name
+      end
     end
 
     private
@@ -96,6 +99,10 @@ module OdeonUk
 
     def cinema_response
       @sinema_response ||= HTTParty.get(@url)
+    end
+
+    def film_nodes
+      parsed_showtimes.css('.film-detail .film')
     end
 
     def parsed_showtimes
