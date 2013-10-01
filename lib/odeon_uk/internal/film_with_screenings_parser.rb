@@ -13,6 +13,7 @@ module OdeonUk
         name = name.gsub 'Autism Friendly Screening -', '' # remove autism friendly
         name = name.gsub '(live)', '' # remove '(live)' for steamed performances
         name = name.gsub 'ROH -', 'Royal Opera House:' # fill out Royal Opera House
+        name = name.gsub 'Met Opera -', 'Met Opera:' # fill out Met Opera
         name = name.squeeze(' ') # spaces compressed
         name = name.gsub /\A\s/, '' # remove leading spaces
         name = name.gsub /\s\z/, '' # remove trailing spaces

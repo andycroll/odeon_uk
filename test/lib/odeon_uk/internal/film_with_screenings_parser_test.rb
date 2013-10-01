@@ -36,6 +36,14 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
         subject.must_equal('Royal Opera House: Turandot 2013')
       end
     end
+
+    describe 'passed valid film html with Met Opera screening' do
+      let(:film_html) { read_film_html('met-opera-eugene-onegin') }
+
+      it 'returns the film name' do
+        subject.must_equal('Met Opera: Eugene Onegin 2013')
+      end
+    end
   end
 
   def read_film_html(filename)
