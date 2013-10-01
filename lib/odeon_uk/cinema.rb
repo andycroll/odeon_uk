@@ -75,6 +75,22 @@ module OdeonUk
       end
     end
 
+    # Public: Returns films for an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.films
+    #   # => [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek Into Darkness">]
+    #
+    # Returns an array of Odeon::Film objects
+    def screenings
+      film_nodes.map do |node|
+        parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
+        OdeonUk::Screening.new parser.name, self.name, Date.today, '00:00:00', nil
+      end
+    end
+
     private
 
     def self.cinema_links
