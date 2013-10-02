@@ -2,8 +2,8 @@ require_relative '../../../test_helper'
 
 describe OdeonUk::Internal::FilmWithScreeningsParser do
 
-  describe '#name' do
-    subject { OdeonUk::Internal::FilmWithScreeningsParser.new(film_html).name }
+  describe '#film_name' do
+    subject { OdeonUk::Internal::FilmWithScreeningsParser.new(film_html).film_name }
 
     describe 'passed valid film html with simple name' do
       let(:film_html) { read_film_html('about-time') }

@@ -71,7 +71,7 @@ module OdeonUk
     def films
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
-        OdeonUk::Film.new parser.name
+        OdeonUk::Film.new parser.film_name
       end
     end
 
@@ -87,7 +87,7 @@ module OdeonUk
     def screenings
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
-        OdeonUk::Screening.new parser.name, self.name, Date.today, '00:00:00', nil
+        OdeonUk::Screening.new parser.film_name, self.name, Date.today, '00:00:00', nil
       end
     end
 
