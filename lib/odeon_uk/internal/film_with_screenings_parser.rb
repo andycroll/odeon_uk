@@ -14,9 +14,20 @@ module OdeonUk
         name = name.gsub '(live)', '' # remove '(live)' for steamed performances
         name = name.gsub 'ROH -', 'Royal Opera House:' # fill out Royal Opera House
         name = name.gsub 'Met Opera -', 'Met Opera:' # fill out Met Opera
+        name = name.gsub /Cinemagic \d{1,4} \-/, '' # remove cinemagic stuff
+        name = name.gsub 'UKJFF -', '' # remove UK Jewish festival prefix
+        name = name.gsub 'NT Live -', 'National Theatre:' # National theatre
+        name = name.gsub 'National Theatre Live -', 'National Theatre:'
+        name = name.gsub /\(Encore.+\)/, '' # National theatre, remove encore
+        name = name.gsub 'Bolshoi -', 'Bolshoi:' # bolshoi ballet
+        name = name.gsub /\([Ll]ive\)/, '' # remove bolshoi-style live
+        name = name.gsub 'Globe On Screen:', 'Globe:' # globe
+        if name.match /RSC Live/
+          name = 'Royal Shakespeare Company: ' + name.gsub(/\- RSC Live \d{1,4}/, '')
+        end
         name = name.squeeze(' ') # spaces compressed
-        name = name.gsub /\A\s/, '' # remove leading spaces
-        name = name.gsub /\s\z/, '' # remove trailing spaces
+        name = name.gsub /\A\s+/, '' # remove leading spaces
+        name = name.gsub /\s+\z/, '' # remove trailing spaces
       end
     end
   end
