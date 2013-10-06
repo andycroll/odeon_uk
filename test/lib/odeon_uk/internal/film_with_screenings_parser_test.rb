@@ -102,6 +102,31 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
     end
   end
 
+  describe '#screenings' do
+    subject { OdeonUk::Internal::FilmWithScreeningsParser.new(film_html).screenings }
+
+    describe 'passed valid film html' do
+      let(:film_html) { read_film_html('about-time') }
+
+      it 'returns an array of screenings' do
+        subject.must_be_instance_of Array
+        subject.each do |element|
+          element.must_be_instance_of OdeonUk::Screening
+        end
+      end
+
+      it 'returns an array of screenings of the correct film' do
+        subject.each do |element|
+          element.film_name.must_equal 'About Time'
+        end
+      end
+
+      it 'returns the correct number of screenings' do
+        subject.count.must_equal 21
+      end
+    end
+  end
+
   def read_film_html(filename)
     path = '../../../../fixtures/odeon-brighton-showtimes'
     File.read(File.expand_path("#{path}/#{filename}.html", __FILE__))
