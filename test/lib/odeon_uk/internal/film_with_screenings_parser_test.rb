@@ -127,6 +127,50 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
     end
   end
 
+  describe '#showings' do
+    subject { OdeonUk::Internal::FilmWithScreeningsParser.new(film_html).showings }
+
+    describe 'passed valid film html' do
+      let(:film_html) { read_film_html('about-time') }
+
+      it 'returns an hash of varients => array of times' do
+        subject.must_be_instance_of Hash
+        subject.each do |key, value|
+          key.must_equal '2D'
+          value.must_be_instance_of Array
+          value.each do |element|
+            element.must_be_instance_of Time
+          end
+        end
+      end
+
+      it 'returns the correct number of screenings' do
+        subject['2D'].count.must_equal 21
+      end
+    end
+
+    describe 'passed valid film html' do
+      let(:film_html) { read_film_html('thor-the-dark-world', 'manchester') }
+
+      it 'returns an hash of varients => array of times' do
+        subject.must_be_instance_of Hash
+        subject.keys.must_equal ['2D', 'IMAX 3D', '3D']
+        subject.values.each do |value|
+          value.must_be_instance_of Array
+          value.each do |element|
+            element.must_be_instance_of Time
+          end
+        end
+      end
+
+      it 'returns the correct number of screenings' do
+        subject['2D'].count.must_equal 1
+        subject['3D'].count.must_equal 1
+        subject['IMAX 3D'].count.must_equal 37
+      end
+    end
+  end
+
   def read_film_html(filename, cinema='brighton')
     path = "../../../../fixtures/#{cinema}-showtimes"
     File.read(File.expand_path("#{path}/#{filename}.html", __FILE__))

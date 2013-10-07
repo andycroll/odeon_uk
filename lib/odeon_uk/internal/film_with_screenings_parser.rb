@@ -40,6 +40,18 @@ module OdeonUk
           OdeonUk::Screening.new(film_name, 'Nowhere', screening_time.to_date, screening_time.strftime('%H:%M'))
         end
       end
+
+      def showings
+        out = @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|
+          varient = varient_node.css('.tech a').text.gsub('in ', '').upcase
+
+          times = varient_node.css('.performance-detail').map do |screening_node|
+            Time.parse screening_node['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s
+          end
+
+          result.merge(varient => times)
+        end
+      end
     end
   end
 end
