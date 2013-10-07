@@ -127,8 +127,8 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
     end
   end
 
-  def read_film_html(filename)
-    path = '../../../../fixtures/odeon-brighton-showtimes'
+  def read_film_html(filename, cinema='brighton')
+    path = "../../../../fixtures/#{cinema}-showtimes"
     File.read(File.expand_path("#{path}/#{filename}.html", __FILE__))
   end
 end
