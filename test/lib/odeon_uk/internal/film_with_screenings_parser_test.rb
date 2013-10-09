@@ -140,12 +140,19 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
           value.must_be_instance_of Array
           value.each do |element|
             element.must_be_instance_of Time
+            element.zone.must_equal 'UTC'
           end
         end
       end
 
       it 'returns the correct number of screenings' do
         subject['2D'].count.must_equal 21
+      end
+
+      it 'returns UTC times for showings' do
+        # about times are from British Summer Time UTC+1
+        # the actual show time is 20:30 from the fixture
+        subject['2D'].last.must_equal Time.utc(2013, 9, 19, 19, 30, 0)
       end
     end
 
@@ -159,6 +166,7 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
           value.must_be_instance_of Array
           value.each do |element|
             element.must_be_instance_of Time
+            element.zone.must_equal 'UTC'
           end
         end
       end
@@ -167,6 +175,12 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
         subject['2D'].count.must_equal 1
         subject['3D'].count.must_equal 1
         subject['IMAX 3D'].count.must_equal 37
+      end
+
+      it 'returns UTC times for showings' do
+        # about times are from GMT
+        # the actual show time is 00:01 from the fixture
+        subject['2D'].last.must_equal Time.utc(2013, 10, 30, 0, 1, 0)
       end
     end
   end

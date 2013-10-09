@@ -1,5 +1,6 @@
 require 'httparty'
 require 'nokogiri'
+require 'tzinfo'
 require 'pp'
 
 require_relative './odeon_uk/internal/film_with_screenings_parser'
