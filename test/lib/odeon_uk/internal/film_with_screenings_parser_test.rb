@@ -131,7 +131,7 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
       end
     end
 
-    describe 'passed valid film html' do
+    describe 'passed valid film html for multi varients' do
       let(:film_html) { read_film_html('thor-the-dark-world', 'manchester') }
 
       it 'returns an hash of varients => array of times' do
