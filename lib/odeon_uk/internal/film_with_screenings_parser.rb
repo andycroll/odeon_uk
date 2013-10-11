@@ -36,7 +36,7 @@ module OdeonUk
 
       def showings
         tz = TZInfo::Timezone.get('Europe/London')
-        out = @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|
+        @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|
           varient = varient_node.css('.tech a').text.gsub('in ', '').upcase
 
           times = varient_node.css('.performance-detail').map do |screening_node|
