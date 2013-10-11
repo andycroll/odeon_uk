@@ -115,5 +115,10 @@ describe OdeonUk::Cinema do
     it 'returns screening objects with correct cinema name' do
       subject.each { |s| s.cinema_name.must_equal 'Brighton' }
     end
+
+    it 'returns screening objects with correct UTC times' do
+      subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
+      subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 40, 0)
+    end
   end
 end

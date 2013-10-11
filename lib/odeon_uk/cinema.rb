@@ -87,8 +87,12 @@ module OdeonUk
     def screenings
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
-        OdeonUk::Screening.new parser.film_name, self.name, Date.today, '00:00:00', nil
-      end
+        parser.showings.map do |screening_type, times|
+          times.map do |time|
+            OdeonUk::Screening.new parser.film_name, self.name, time.strftime('%d/%m/%Y'), time.strftime('%H:%M:%S'), nil
+          end
+        end.flatten
+      end.flatten
     end
 
     private
@@ -118,7 +122,7 @@ module OdeonUk
     end
 
     def film_nodes
-      parsed_showtimes.css('.film-detail .film')
+      parsed_showtimes.css('.film-detail')
     end
 
     def parsed_showtimes
