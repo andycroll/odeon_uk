@@ -21,7 +21,7 @@ module OdeonUk
     # varient     - String representing the type of showing (e.g. 3d/baby/live)
     def initialize(film_name, cinema_name, date, time, varient=nil)
       @cinema_name, @film_name, @varient = cinema_name, film_name, varient
-      @when = Time.parse("#{date} #{time}")
+      @when = Time.parse("#{date} #{time} UTC")
     end
 
     # Public: The Date of the screening
