@@ -34,13 +34,6 @@ module OdeonUk
         name = name.gsub /\s+\z/, '' # remove trailing spaces
       end
 
-      def screenings
-        @nokogiri_html.css('.times .performance-detail').map do |screening_html|
-          screening_time = Time.parse screening_html['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s
-          OdeonUk::Screening.new(film_name, 'Nowhere', screening_time.to_date, screening_time.strftime('%H:%M'))
-        end
-      end
-
       def showings
         tz = TZInfo::Timezone.get('Europe/London')
         out = @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|
