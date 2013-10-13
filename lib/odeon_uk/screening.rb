@@ -30,19 +30,5 @@ module OdeonUk
     def date
       @when.to_date
     end
-
-    # Public: The string representation of the date of the screening
-    #
-    # Returns a String
-    def date_s
-      date.to_s
-    end
-
-    # Public: The string representation of the time of the screening
-    #
-    # Returns a String
-    def time_s
-      "#{@when.hour}:#{@when.min}"
-    end
   end
 end
