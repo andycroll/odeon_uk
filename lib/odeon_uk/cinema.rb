@@ -118,7 +118,7 @@ module OdeonUk
     end
 
     def cinema_response
-      @sinema_response ||= HTTParty.get(@url)
+      @cinema_response ||= HTTParty.get(@url)
     end
 
     def film_nodes
