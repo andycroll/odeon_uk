@@ -91,7 +91,7 @@ module OdeonUk
           times.map do |time|
             OdeonUk::Screening.new parser.film_name, self.name, time.strftime('%d/%m/%Y'), time.strftime('%H:%M:%S'), nil
           end
-        end.flatten
+        end
       end.flatten
     end
 
