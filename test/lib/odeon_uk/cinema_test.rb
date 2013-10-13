@@ -48,12 +48,6 @@ describe OdeonUk::Cinema do
     end
   end
 
-  describe '.find_by_name name' do
-    let(:name) { 'Tunbridge Wells' }
-
-    subject { OdeonUk::Cinema.find_by_name(name) }
-  end
-
   describe '.new id, name, url' do
     it 'stores id, name, slug and url' do
       cinema = OdeonUk::Cinema.new '23', 'Brighton & Hove', '/cinemas/brighton/71/'
