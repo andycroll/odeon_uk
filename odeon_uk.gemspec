@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name          = "odeon_uk"
   gem.version       = OdeonUk::VERSION
   gem.authors       = ["Andy Croll"]
-  gem.email         = ["andycroll@deepcalm.com"]
+  gem.email         = ["andy@goodscary.com"]
   gem.description   = %q{An API to pull movie information from the ODEON.co.uk website}
   gem.summary       = %q{It's a scraper, but a nice one}
   gem.homepage      = "http://github.com/andycroll/odeon_uk"
