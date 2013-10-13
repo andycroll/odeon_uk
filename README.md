@@ -1,6 +1,6 @@
 # OdeonUk
 
-A simple gem to parse the (Odeon UK website)[http://odeon.co.uk] and spit out useful formatted info.
+A simple gem to parse the [Odeon UK website][http://odeon.co.uk] and spit out useful formatted info.
 
 [![Code Climate](https://codeclimate.com/github/andycroll/odeon_uk.png)](https://codeclimate.com/github/andycroll/odeon_uk)
 [![Build Status](https://travis-ci.org/andycroll/odeon_uk.png?branch=master)](https://travis-ci.org/andycroll/odeon_uk)
