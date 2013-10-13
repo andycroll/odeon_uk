@@ -95,6 +95,22 @@ module OdeonUk
       end.flatten
     end
 
+    # Public: Returns screenings for particular film at an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.screenings_of 'Iron Man 3'
+    #   # => [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
+    #   cinema.screenings_of <OdeonUk::Film name="Iron Man 3">
+    #   # => [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
+    #
+    # Returns an array of Odeon::Screening objects
+    def screenings_of film
+      film_name = (film.is_a?(OdeonUk::Film) ? film.name : film)
+      screenings.select { |s| s.film_name == film_name }
+    end
+
     private
 
     def self.cinema_links

@@ -115,4 +115,71 @@ describe OdeonUk::Cinema do
       subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 40, 0)
     end
   end
+
+  describe '#screenings_of(film_or_string)' do
+    let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
+    subject { cinema.screenings_of(film_or_string) }
+
+    before do
+      brighton_screenings_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton-showtimes.html') )
+      stub_request(:get, 'http://www.odeon.co.uk/showtimes/week/71?siteId=71').to_return( status: 200, body: brighton_screenings_body, headers: {} )
+    end
+
+    describe 'passed string' do
+      let(:film_or_string) { 'About Time' }
+
+      it 'returns an array of screenings' do
+        subject.must_be_instance_of(Array)
+        subject.each do |item|
+          item.must_be_instance_of(OdeonUk::Screening)
+        end
+      end
+
+      it 'returns the correct number of screening objects' do
+        subject.count.must_equal 21
+      end
+
+      it 'returns screening objects with correct film names' do
+        subject.each { |s| s.film_name.must_equal 'About Time' }
+      end
+
+      it 'returns screening objects with correct cinema name' do
+        subject.each { |s| s.cinema_name.must_equal 'Brighton' }
+      end
+
+      it 'returns screening objects with correct UTC times' do
+        subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
+        subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 30, 0)
+      end
+    end
+
+    describe 'passed OdeonUk::Film' do
+      let(:film_or_string) { OdeonUk::Film.new 'About Time' }
+
+      it 'returns an array of screenings' do
+        subject.must_be_instance_of(Array)
+        subject.each do |item|
+          item.must_be_instance_of(OdeonUk::Screening)
+        end
+      end
+
+      it 'returns the correct number of screening objects' do
+        subject.count.must_equal 21
+      end
+
+      it 'returns screening objects with correct film names' do
+        subject.each { |s| s.film_name.must_equal 'About Time' }
+      end
+
+      it 'returns screening objects with correct cinema name' do
+        subject.each { |s| s.cinema_name.must_equal 'Brighton' }
+      end
+
+      it 'returns screening objects with correct UTC times' do
+        subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
+        subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 30, 0)
+      end
+    end
+  end
+
 end
