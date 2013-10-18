@@ -72,7 +72,7 @@ module OdeonUk
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
         OdeonUk::Film.new parser.film_name
-      end
+      end.uniq
     end
 
     # Public: Returns screenings for an Odeon cinema

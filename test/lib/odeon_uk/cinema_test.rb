@@ -76,7 +76,18 @@ describe OdeonUk::Cinema do
     end
 
     it 'returns correct number of films' do
-      subject.count.must_equal 17
+      subject.count.must_equal 16
+    end
+
+    it 'returns uniquely named films' do
+      subject.each_with_index do |item, index|
+        subject.each_with_index do |jtem, i|
+          if index != i
+            item.name.wont_equal jtem.name
+            item.wont_equal jtem
+          end
+        end
+      end
     end
 
     it 'returns film objects with correct names' do
