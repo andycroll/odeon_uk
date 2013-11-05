@@ -18,12 +18,12 @@ module OdeonUk
     #
     # film_name   - String of the film name
     # cinema_name - String of the cinema name on the Odeon website
-    # date        - String/Date representing the date of the screening
-    # time        - String representing the time of the screening (24 hour clock)
+    # time        - Time representing the time of the screening (24 hour clock)
     # varient     - String representing the type of showing (e.g. 3d/baby/live)
-    def initialize(film_name, cinema_name, date, time, varient=nil)
+    def initialize(film_name, cinema_name, time, booking_url=nil, varient=nil)
       @cinema_name, @film_name, @varient = cinema_name, film_name, varient
-      @when = Time.parse("#{date} #{time} UTC")
+      @booking_url = booking_url
+      @when = time.utc? ? time : TZInfo::Timezone.get('Europe/London').local_to_utc(time)
     end
 
     # Public: The Date of the screening
