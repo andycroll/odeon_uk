@@ -32,9 +32,6 @@ describe OdeonUk::Cinema do
     before do
       sitemap_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-sitemap.html') )
       stub_request(:get, 'http://www.odeon.co.uk/sitemap/').to_return( status: 200, body: sitemap_body, headers: {} )
-
-      # cinema_page_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
-      # stub_request(:get, 'http://www.odeon.co.uk/cinema/brighton/23/').to_return( status: 200, body: cinema_page_body, headers: {} )
     end
 
     it 'returns a cinema' do
