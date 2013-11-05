@@ -22,8 +22,8 @@ module OdeonUk
     def initialize(id, name, url)
       @brand = 'Odeon'
       @id    = id.to_i
-      @name  = name
-      @slug  = name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
+      @name  = name.gsub('London - ','')
+      @slug  = @name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
       @url   = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
     end
 

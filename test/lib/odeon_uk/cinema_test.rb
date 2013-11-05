@@ -25,8 +25,6 @@ describe OdeonUk::Cinema do
   end
 
   describe '.find(id)' do
-    let(:id) { 71 }
-
     subject { OdeonUk::Cinema.find(id) }
 
     before do
@@ -34,16 +32,33 @@ describe OdeonUk::Cinema do
       stub_request(:get, 'http://www.odeon.co.uk/sitemap/').to_return( status: 200, body: sitemap_body, headers: {} )
     end
 
-    it 'returns a cinema' do
-      subject.must_be_instance_of(OdeonUk::Cinema)
+    describe 'Brighton' do
+      let(:id) { 71 }
 
-      subject.id.must_equal 71
-      subject.brand.must_equal 'Odeon'
-      subject.name.must_equal 'Brighton'
-      subject.slug.must_equal 'brighton'
-      subject.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
+      it 'returns a cinema' do
+        subject.must_be_instance_of(OdeonUk::Cinema)
+
+        subject.id.must_equal 71
+        subject.brand.must_equal 'Odeon'
+        subject.name.must_equal 'Brighton'
+        subject.slug.must_equal 'brighton'
+        subject.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
+      end
     end
-  end
+
+    describe 'Leicester Square' do
+      let(:id) { 105 }
+
+      it 'returns a cinema' do
+        subject.must_be_instance_of(OdeonUk::Cinema)
+
+        subject.id.must_equal 105
+        subject.brand.must_equal 'Odeon'
+        subject.name.must_equal 'Leicester Square'
+        subject.slug.must_equal 'leicester-square'
+        subject.url.must_equal 'http://www.odeon.co.uk/cinemas/london_leicester_square/105/'
+      end
+    end  end
 
   describe '.new id, name, url' do
     it 'stores id, name, slug and url' do
@@ -132,7 +147,7 @@ describe OdeonUk::Cinema do
         subject.must_be_instance_of String
       end
 
-      it 'returns a string' do
+      it 'returns town name' do
         subject.must_equal 'Brighton'
       end
     end
@@ -297,7 +312,7 @@ describe OdeonUk::Cinema do
         subject.must_be_instance_of String
       end
 
-      it 'returns a string' do
+      it 'returns first line of address' do
         subject.must_equal 'Kingswest'
       end
     end
