@@ -227,6 +227,7 @@ describe OdeonUk::Cinema do
     end
 
     it 'returns screening objects with correct UTC times' do
+      pp subject.first
       subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
       subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 40, 0)
     end

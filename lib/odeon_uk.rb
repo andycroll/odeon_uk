@@ -2,6 +2,7 @@ require 'httparty'
 require 'nokogiri'
 require 'tzinfo'
 require 'tzinfo/data'
+require 'pp'
 
 require_relative './odeon_uk/version'
 
