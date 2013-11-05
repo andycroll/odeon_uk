@@ -56,6 +56,31 @@ describe OdeonUk::Cinema do
     end
   end
 
+  describe '#adr' do
+    describe 'short address' do
+      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
+      subject { cinema.adr }
+
+      before do
+        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
+        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+      end
+
+      it 'returns a Hash' do
+        subject.must_be_instance_of Hash
+      end
+
+      it 'returns address hash' do
+        subject.must_equal({
+          street_address: 'Kingswest',
+          locality: 'Brighton',
+          postal_code: 'BN1 2RE',
+          country: 'United Kingdom'
+        })
+      end
+    end
+  end
+
   describe '#films' do
     let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton & Hove', '/cinemas/brighton/71/') }
     subject { cinema.films }

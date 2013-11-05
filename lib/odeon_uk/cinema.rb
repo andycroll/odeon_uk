@@ -59,6 +59,27 @@ module OdeonUk
       all.select { |cinema| cinema.id == id }[0]
     end
 
+    # Public: Returns adress hash of an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.adr
+    #   # => { street_address: 'Kingswest',
+    #          locality: 'Brighton',
+    #          postal_code: 'BN1 2RE',
+    #          country_name: 'United Kingdom' }
+    #
+    # Returns an array of strings or nil
+    def adr
+      {
+        street_address: street_address,
+        locality: locality,
+        postal_code: postal_code,
+        country: 'United Kingdom'
+      }
+    end
+
     # Public: Returns films for an Odeon cinema
     #
     # Examples
