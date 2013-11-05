@@ -39,11 +39,14 @@ module OdeonUk
         @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|
           varient = varient_node.css('.tech a').text.gsub('in ', '').upcase
 
-          times = varient_node.css('.performance-detail').map do |screening_node|
-            tz.local_to_utc(Time.parse(screening_node['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s))
+          times_url = varient_node.css('.performance-detail').map do |screening_node|
+            [
+              tz.local_to_utc(Time.parse(screening_node['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s)),
+              "http://www.odeon.co.uk#{screening_node['href']}"
+            ]
           end
 
-          result.merge(varient => times)
+          result.merge(varient => times_url)
         end
       end
     end

@@ -3,6 +3,8 @@ module OdeonUk
   # Public: The object representing a screening of a film on the Odeon UK website
   class Screening
 
+    # Public: Returns the booking URL on the cinema website
+    attr_reader :booking_url
     # Public: Returns the String name of the cinema
     attr_reader :cinema_name
     # Public: Returns the String name of the film

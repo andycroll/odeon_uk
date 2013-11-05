@@ -114,8 +114,10 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
           key.must_equal '2D'
           value.must_be_instance_of Array
           value.each do |element|
-            element.must_be_instance_of Time
-            element.zone.must_equal 'UTC'
+            element[0].must_be_instance_of Time
+            element[0].zone.must_equal 'UTC'
+            element[1].must_be_instance_of String
+            element[1].must_match 'http://www.odeon.co.uk/'
           end
         end
       end
@@ -127,7 +129,7 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
       it 'returns UTC times for showings' do
         # about times are from British Summer Time UTC+1
         # the actual show time is 20:30 from the fixture
-        subject['2D'].last.must_equal Time.utc(2013, 9, 19, 19, 30, 0)
+        subject['2D'].last[0].must_equal Time.utc(2013, 9, 19, 19, 30, 0)
       end
     end
 
@@ -140,8 +142,10 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
         subject.values.each do |value|
           value.must_be_instance_of Array
           value.each do |element|
-            element.must_be_instance_of Time
-            element.zone.must_equal 'UTC'
+            element[0].must_be_instance_of Time
+            element[0].zone.must_equal 'UTC'
+            element[1].must_be_instance_of String
+            element[1].must_match 'http://www.odeon.co.uk/'
           end
         end
       end
@@ -155,7 +159,7 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
       it 'returns UTC times for showings' do
         # about times are from GMT
         # the actual show time is 00:01 from the fixture
-        subject['2D'].last.must_equal Time.utc(2013, 10, 30, 0, 1, 0)
+        subject['2D'].last[0].must_equal Time.utc(2013, 10, 30, 0, 1, 0)
       end
     end
   end
