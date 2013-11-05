@@ -96,6 +96,25 @@ describe OdeonUk::Cinema do
     end
   end
 
+  describe '#locality' do
+    describe 'short address' do
+      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
+      subject { cinema.locality }
+
+      before do
+        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
+        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+      end
+
+      it 'returns a string' do
+        subject.must_be_instance_of String
+      end
+
+      it 'returns a string' do
+        subject.must_equal 'Brighton'
+      end
+    end
+  end
   describe '#screenings' do
     let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
     subject { cinema.screenings }

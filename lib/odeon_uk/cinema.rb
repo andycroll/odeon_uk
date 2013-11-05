@@ -75,6 +75,19 @@ module OdeonUk
       end.uniq
     end
 
+    # Public: Returns the locality (town) of an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.locality
+    #   # => 'Brighton'
+    #
+    # Returns a String
+    def locality
+      address_node.text.match(/\w+(\s\w+){0,}\s+(\w+(\s\w+){0,})/)[2]
+    end
+
     # Public: Returns screenings for an Odeon cinema
     #
     # Examples
