@@ -49,7 +49,7 @@ describe OdeonUk::Cinema do
     describe 'Leicester Square' do
       let(:id) { 105 }
 
-      it 'returns a cinema' do
+      it 'returns a cinema with London prefix removed in the name' do
         subject.must_be_instance_of(OdeonUk::Cinema)
 
         subject.id.must_equal 105
