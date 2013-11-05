@@ -115,6 +115,55 @@ describe OdeonUk::Cinema do
       end
     end
   end
+
+  describe '#postal_code' do
+    describe 'short address' do
+      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
+      subject { cinema.postal_code }
+
+      before do
+        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
+        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+      end
+
+      it 'returns a string' do
+        subject.must_be_instance_of String
+      end
+
+      it 'returns the postcode' do
+        subject.must_equal 'BN1 2RE'
+      end
+    end
+
+    describe 'short address (London)' do
+      let(:cinema) { OdeonUk::Cinema.new('211', 'BFI Imax', '/cinemas/bfi_imax/211/') }
+      subject { cinema.postal_code }
+
+      before do
+        body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-bfi-imax.html') )
+        stub_request(:get, 'http://www.odeon.co.uk/cinemas/bfi_imax/211/').to_return( status: 200, body: body, headers: {} )
+      end
+
+      it 'returns the postcode' do
+        subject.must_equal 'SE1 8XR'
+      end
+    end
+
+    describe 'short address (extra London Postcode)' do
+      let(:cinema) { OdeonUk::Cinema.new('105', 'Leicester Square', '/cinemas/london_leicester_square/105/') }
+      subject { cinema.postal_code }
+
+      before do
+        body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-london-leicester-square.html') )
+        stub_request(:get, 'http://www.odeon.co.uk/cinemas/london_leicester_square/105/').to_return( status: 200, body: body, headers: {} )
+      end
+
+      it 'returns the postcode' do
+        subject.must_equal 'WC2H 7LQ'
+      end
+    end
+  end
+
   describe '#screenings' do
     let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
     subject { cinema.screenings }

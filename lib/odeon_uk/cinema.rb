@@ -88,6 +88,20 @@ module OdeonUk
       address_node.text.match(/\w+(\s\w+){0,}\s+(\w+(\s\w+){0,})/)[2]
     end
 
+
+    # Public: Returns the postal code of an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.postal_code
+    #   # => 'BN1 2RE'
+    #
+    # Returns a String
+    def postal_code
+      address_node.text.match(/[A-Z]{1,2}\d{1,2}[A-Z]?\s\d{1,2}[A-Z]{1,2}/)[0]
+    end
+
     # Public: Returns screenings for an Odeon cinema
     #
     # Examples
