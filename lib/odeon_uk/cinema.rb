@@ -111,6 +111,19 @@ module OdeonUk
       screenings.select { |s| s.film_name == film_name }
     end
 
+    # Public: Returns the street adress of an Odeon cinema
+    #
+    # Examples
+    #
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.street_address
+    #   # => 'Kingswest'
+    #
+    # Returns a String
+    def street_address
+      address_node.text.match(/\A\s+(\w+(\s\w+){0,})/)[1]
+    end
+
     private
 
     def self.cinema_links
@@ -133,8 +146,16 @@ module OdeonUk
       @sitemap_response ||= HTTParty.get('http://www.odeon.co.uk/sitemap/')
     end
 
+    def address_node
+      parsed_cinema.css('.gethere .span4 .description')[0]
+    end
+
     def cinema_response
       @cinema_response ||= HTTParty.get(@url)
+    end
+
+    def parsed_cinema
+      Nokogiri::HTML(cinema_response)
     end
 
     def film_nodes
