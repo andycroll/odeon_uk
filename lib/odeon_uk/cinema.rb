@@ -135,9 +135,9 @@ module OdeonUk
     def screenings
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
-        parser.showings.map do |screening_type, times|
-          times.map do |time|
-            OdeonUk::Screening.new parser.film_name, self.name, time.strftime('%d/%m/%Y'), time.strftime('%H:%M:%S'), nil
+        parser.showings.map do |screening_type, times_urls|
+          times_urls.map do |array|
+            OdeonUk::Screening.new parser.film_name, self.name, array[0], array[1], screening_type
           end
         end
       end.flatten

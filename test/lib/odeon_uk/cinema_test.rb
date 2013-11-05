@@ -230,6 +230,26 @@ describe OdeonUk::Cinema do
       subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
       subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 40, 0)
     end
+
+    it 'returns screening objects with correct varients' do
+      subject.each do |screening|
+        screening.varient.wont_be_nil
+        screening.varient.must_match /[23]D/
+      end
+
+      subject.first.varient.must_equal '2D'
+      subject.last.varient.must_equal '2D'
+    end
+
+    it 'returns screening objects with booking urls' do
+      subject.each do |screening|
+        screening.booking_url.wont_be_nil
+        screening.booking_url.must_be_instance_of String
+      end
+
+      subject.first.booking_url.must_equal 'http://www.odeon.co.uk/booking/init/MUZFRjAwMDAwMjNVRFBETVhHIzcxIzE0NDI2/'
+      subject.last.booking_url.must_equal 'http://www.odeon.co.uk/booking/init/RjhFRjAwMDAwMjNVRFBETVhHIzcxIzEzOTY3/'
+    end
   end
 
   describe '#screenings_of(film_or_string)' do
