@@ -2,6 +2,3 @@ language: ruby
 rvm:
   - 1.9.3
   - 2.0.0
-before_install:
-  - sudo service ntp stop # ntpd has to be stopped before syncing manually
-  - sudo ntpdate ntp.ubuntu.com
