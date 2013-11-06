@@ -41,7 +41,7 @@ module OdeonUk
 
           times_url = varient_node.css('.performance-detail').map do |screening_node|
             [
-              tz.local_to_utc(Time.parse(screening_node['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s)),
+              tz.local_to_utc(Time.parse(screening_node['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s + ' UTC')),
               "http://www.odeon.co.uk#{screening_node['href']}"
             ]
           end
