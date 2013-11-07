@@ -1,24 +1,23 @@
 module OdeonUk
 
-  # Public: The object representing a cinema on the Odeon UK website
+  # The object representing a cinema on the Odeon UK website
   class Cinema
 
-    # Public: Returns the String brand of the cinema #=> 'Odeon'
+    # @return [String] the brand of the cinema
     attr_reader :brand
-    # Public: Returns the Integer id of the cinema on teh odeon website
+    # @return [Integer] the numeric id of the cinema on the Odeon website
     attr_reader :id
-    # Public: Returns the String name of the cinema
+    # @return [String] the name of the cinema
     attr_reader :name
-    # Public: Returns the String slug of the cinema
+    # @return [String] the slug of the cinema
     attr_reader :slug
-    # Public: Returns the String url of the cinema's page on odeon.co.uk
+    # @return [String] the url of the cinema on the Odeon website
     attr_reader :url
 
-    # Public: Initialize a cinema
-    #
-    # id   - Integer/String of the cinema on the odeon website
-    # name - String of cinema name
-    # url  - String of cinema url on the odeon website
+    # @param [Integer, String] id cinema id
+    # @param [String] name cinema name
+    # @param [String] url url on Odeon website
+    # @return [OdeonUk::Cinema]
     def initialize(id, name, url)
       @brand = 'Odeon'
       @id    = id.to_i
@@ -27,31 +26,23 @@ module OdeonUk
       @url   = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
     end
 
-    # Public: Return basic cinema information for all Odeon cinemas
-    #
-    # Examples
-    #
+    # Return basic cinema information for all cinemas
+    # @return [Array<OdeonUk::Cinema>]
+    # @example
     #   OdeonUk::Cinema.all
-    #   # => [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" id=23 url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
-    #
-    # Returns an array of hashes of cinema information.
+    #   #=> [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" id=23 url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
     def self.all
       cinema_links.map do |link|
         new_from_link link
       end
     end
 
-    # Public: Return single cinema information for an Odeon cinema
-    #
-    # id_string - a string/int representing the cinema id
-    #             of the format '32'/32 as used on the odeon.co.uk website
-    #
-    # Examples
-    #
+    # Find a single cinema
+    # @param [Integer, String] id the cinema id of the format 71/'71' as used on the odeon.co.uk website
+    # @return [OdeonUk::Cinema, nil]
+    # @example
     #   OdeonUk::Cinema.find('71')
-    #   # => <OdeonUk::Cinema brand="Odeon" name="Brighton" slug="brighton" id=71 url="...">
-    #
-    # Returns an Odeon::Cinema or nil if none was found
+    #   #=> <OdeonUk::Cinema brand="Odeon" name="Brighton" slug="brighton" id=71 url="...">
     def self.find(id)
       id = id.to_i
       return nil unless id > 0
@@ -59,18 +50,12 @@ module OdeonUk
       all.select { |cinema| cinema.id == id }[0]
     end
 
-    # Public: Returns adress hash of an Odeon cinema
-    #
-    # Examples
-    #
+    # Address of the cinema
+    # @return [Hash] of different address parts
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.adr
-    #   # => { street_address: 'Kingswest',
-    #          locality: 'Brighton',
-    #          postal_code: 'BN1 2RE',
-    #          country_name: 'United Kingdom' }
-    #
-    # Returns an array of strings or nil
+    #   #=> { street_address: 'Kingswest', locality: 'Brighton', postal_code: 'BN1 2RE', country_name: 'United Kingdom' }
     def adr
       {
         street_address: street_address,
@@ -80,15 +65,12 @@ module OdeonUk
       }
     end
 
-    # Public: Returns films for an Odeon cinema
-    #
-    # Examples
-    #
+    # Films with showings scheduled at this cinema
+    # @return [Array<Odeon::Film>]
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.films
-    #   # => [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek Into Darkness">]
-    #
-    # Returns an array of Odeon::Film objects
+    #   #=> [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek Into Darkness">]
     def films
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
@@ -96,42 +78,33 @@ module OdeonUk
       end.uniq
     end
 
-    # Public: Returns the locality (town) of an Odeon cinema
-    #
-    # Examples
-    #
+    # The locality (town) of the cinema
+    # @return [String]
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.locality
-    #   # => 'Brighton'
-    #
-    # Returns a String
+    #   #=> 'Brighton'
     def locality
       address_node.text.match(/\w+(\s\w+){0,}\s+(\w+(\s\w+){0,})/)[2]
     end
 
 
-    # Public: Returns the postal code of an Odeon cinema
-    #
-    # Examples
-    #
+    # Post code of the cinema
+    # @return [String]
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.postal_code
-    #   # => 'BN1 2RE'
-    #
-    # Returns a String
+    #   #=> 'BN1 2RE'
     def postal_code
       address_node.text.match(/[A-Z]{1,2}\d{1,2}[A-Z]?\s\d{1,2}[A-Z]{1,2}/)[0]
     end
 
-    # Public: Returns screenings for an Odeon cinema
-    #
-    # Examples
-    #
+    # All planned screenings
+    # @return [Array<Odeon::Screening>]
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.screenings
-    #   # => [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
-    #
-    # Returns an array of Odeon::Screening objects
+    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
     def screenings
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
@@ -143,31 +116,27 @@ module OdeonUk
       end.flatten
     end
 
-    # Public: Returns screenings for particular film at an Odeon cinema
-    #
-    # Examples
-    #
+    # Screenings for particular film
+    # @param [OdeonUk::Film, String] film a film object or title of the film
+    # @return [Array<Odeon::Screening>]
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
-    #   cinema.screenings_of 'Iron Man 3'
-    #   # => [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
-    #   cinema.screenings_of <OdeonUk::Film name="Iron Man 3">
-    #   # => [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
-    #
-    # Returns an array of Odeon::Screening objects
+    #   cinema.screenings_of('Iron Man 3')
+    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
+    #   iron_man_3 = OdeonUk::Film.new "Iron Man 3"
+    #   cinema.screenings_of(iron_man_3)
+    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
     def screenings_of film
       film_name = (film.is_a?(OdeonUk::Film) ? film.name : film)
       screenings.select { |s| s.film_name == film_name }
     end
 
-    # Public: Returns the street adress of an Odeon cinema
-    #
-    # Examples
-    #
+    # The street adress of the cinema
+    # @return a String
+    # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.street_address
-    #   # => 'Kingswest'
-    #
-    # Returns a String
+    #   #=> 'Kingswest'
     def street_address
       address_node.text.match(/\A\s+(\w+(\s\w+){0,})/)[1]
     end

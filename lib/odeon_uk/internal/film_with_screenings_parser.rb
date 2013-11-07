@@ -1,12 +1,19 @@
 module OdeonUk
+
+  # Internal utility classes: Do not use
+  # @api private
   module Internal
-    # Private: An object to parse a film HTML snippet
+
+    # Parses a chunk of HTML to derive movie showing data
     class FilmWithScreeningsParser
 
+      # @param [String] film_html a chunk of html
       def initialize(film_html)
         @nokogiri_html = Nokogiri::HTML(film_html)
       end
 
+      # The film name
+      # @return [String]
       def film_name
         name = @nokogiri_html.css('.presentation-info h4 a').children.first.to_s
 
@@ -34,6 +41,13 @@ module OdeonUk
         name = name.gsub /\s+\z/, '' # remove trailing spaces
       end
 
+      # Showings
+      # @return [Hash]
+      # @example
+      #   {
+      #     "2D" => [[Time.utc, 'http://www...'], [Time.utc, 'http://www...']],
+      #     "3D" => [[Time.utc, 'http://www...']]
+      #   }
       def showings
         tz = TZInfo::Timezone.get('Europe/London')
         @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|

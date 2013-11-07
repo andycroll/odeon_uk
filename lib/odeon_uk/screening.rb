@@ -1,34 +1,32 @@
 module OdeonUk
 
-  # Public: The object representing a screening of a film on the Odeon UK website
+  # The object representing a single screening of a film on the Odeon UK website
   class Screening
 
-    # Public: Returns the booking URL on the cinema website
+    # @return [String] the booking URL on the cinema website
     attr_reader :booking_url
-    # Public: Returns the String name of the cinema
+    # @return [String] the cinema name
     attr_reader :cinema_name
-    # Public: Returns the String name of the film
+    # @return [String] the film name
     attr_reader :film_name
-    # Public: Returns the Time of the screening
+    # @return [Time] the UTC time of the screening
     attr_reader :when
-    # Public: Returns the Type of screening (3d, baby, kids, live)
+    # @return [String] the type of screening (2D, 3D, IMAX...)
     attr_reader :varient
 
-    # Public: Initialize a screening
-    #
-    # film_name   - String of the film name
-    # cinema_name - String of the cinema name on the Odeon website
-    # time        - Time representing the time of the screening (24 hour clock)
-    # varient     - String representing the type of showing (e.g. 3d/baby/live)
+    # @param [String] film_name the film name
+    # @param [String] the cinema name
+    # @param [Time] time datetime of the screening (UTC preferred)
+    # @param [String] booking_url direct link to the booking page for this screening
+    # @param [String] varient the type of showing (e.g. 3d/baby/live)
     def initialize(film_name, cinema_name, time, booking_url=nil, varient=nil)
       @cinema_name, @film_name, @varient = cinema_name, film_name, varient
       @booking_url = booking_url
       @when = time.utc? ? time : TZInfo::Timezone.get('Europe/London').local_to_utc(time)
     end
 
-    # Public: The Date of the screening
-    #
-    # Returns a Date
+    # The date of the screening
+    # @return [Date]
     def date
       @when.to_date
     end
