@@ -4,10 +4,8 @@ module OdeonUk
   class Film
     include Comparable
 
-    # @!attribute [r] name
     # @return [String] the name of the film
     attr_reader :name
-    # @!attribute [r] slug
     # @return [String] the normalized slug derived from the film name
     attr_reader :slug
 

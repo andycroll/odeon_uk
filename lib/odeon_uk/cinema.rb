@@ -66,7 +66,7 @@ module OdeonUk
     end
 
     # Films with showings scheduled at this cinema
-    # @return [Array<Odeon::Film>]
+    # @return [Array<OdeonUk::Film>]
     # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.films
@@ -100,7 +100,7 @@ module OdeonUk
     end
 
     # All planned screenings
-    # @return [Array<Odeon::Screening>]
+    # @return [Array<OdeonUk::Screening>]
     # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.screenings
