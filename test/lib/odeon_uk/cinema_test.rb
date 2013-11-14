@@ -58,7 +58,8 @@ describe OdeonUk::Cinema do
         subject.slug.must_equal 'leicester-square'
         subject.url.must_equal 'http://www.odeon.co.uk/cinemas/london_leicester_square/105/'
       end
-    end  end
+    end
+  end
 
   describe '.new id, name, url' do
     it 'stores id, name, slug and url' do

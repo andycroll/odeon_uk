@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{An API to pull movie information from the ODEON.co.uk website}
   gem.summary       = %q{It's a scraper, but a nice one}
   gem.homepage      = "http://github.com/andycroll/odeon_uk"
+  gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
