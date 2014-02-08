@@ -50,13 +50,13 @@ cinema.films
 #=> [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek: Into Darkness">]
 
 cinema.screenings
-#=> [<OdeonUk::Screening film="About Time" when="2013-09-09 11:00 UTC" varient="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" varient="kids">, <OdeonUk::Screening ..>, <OdeonUk::Screening ...>]
+#=> [<OdeonUk::Screening film="About Time" when="2013-09-09 11:00 UTC" variant="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" variant="kids">, <OdeonUk::Screening ..>, <OdeonUk::Screening ...>]
 
 cinema.screenings_of 'Iron Man 3'
-#=> [<OdeonUk::Screening film="Iron Man 3" when="2013-09-09 11:00 UTC" varient="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" varient="kids">]
+#=> [<OdeonUk::Screening film="Iron Man 3" when="2013-09-09 11:00 UTC" variant="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" variant="kids">]
 
 cinema.screenings_of <OdeonUk::Film name="Iron Man 3">
-#=> [<OdeonUk::Screening film="Iron Man 3" when="2013-09-09 11:00 UTC" varient="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" varient="kids">]
+#=> [<OdeonUk::Screening film="Iron Man 3" when="2013-09-09 11:00 UTC" variant="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" variant="kids">]
 ```
 
 ### Film

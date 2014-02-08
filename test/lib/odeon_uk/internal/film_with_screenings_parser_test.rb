@@ -108,7 +108,7 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
     describe 'passed valid film html' do
       let(:film_html) { read_film_html('about-time') }
 
-      it 'returns an hash of varients => array of times' do
+      it 'returns an hash of variants => array of times' do
         subject.must_be_instance_of Hash
         subject.each do |key, value|
           key.must_equal '2D'
@@ -133,10 +133,10 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
       end
     end
 
-    describe 'passed valid film html for multi varients' do
+    describe 'passed valid film html for multi variants' do
       let(:film_html) { read_film_html('thor-the-dark-world', 'manchester') }
 
-      it 'returns an hash of varients => array of times' do
+      it 'returns an hash of variants => array of times' do
         subject.must_be_instance_of Hash
         subject.keys.must_equal ['2D', 'IMAX 3D', '3D']
         subject.values.each do |value|

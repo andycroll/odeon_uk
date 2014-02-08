@@ -50,17 +50,17 @@ module OdeonUk
       #   }
       def showings
         tz = TZInfo::Timezone.get('Europe/London')
-        @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, varient_node|
-          varient = varient_node.css('.tech a').text.gsub('in ', '').upcase
+        @nokogiri_html.css('.times-all.accordion-group').inject({}) do |result, variant_node|
+          variant = variant_node.css('.tech a').text.gsub('in ', '').upcase
 
-          times_url = varient_node.css('.performance-detail').map do |screening_node|
+          times_url = variant_node.css('.performance-detail').map do |screening_node|
             [
               tz.local_to_utc(Time.parse(screening_node['title'].match(/\d+\/\d+\/\d+ \d{2}\:\d{2}/).to_s + ' UTC')),
               "http://www.odeon.co.uk#{screening_node['href']}"
             ]
           end
 
-          result.merge(varient => times_url)
+          result.merge(variant => times_url)
         end
       end
     end

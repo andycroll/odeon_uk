@@ -232,14 +232,14 @@ describe OdeonUk::Cinema do
       subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 40, 0)
     end
 
-    it 'returns screening objects with correct varients' do
+    it 'returns screening objects with correct variants' do
       subject.each do |screening|
-        screening.varient.wont_be_nil
-        screening.varient.must_match /[23]D/
+        screening.variant.wont_be_nil
+        screening.variant.must_match /[23]D/
       end
 
-      subject.first.varient.must_equal '2D'
-      subject.last.varient.must_equal '2D'
+      subject.first.variant.must_equal '2D'
+      subject.last.variant.must_equal '2D'
     end
 
     it 'returns screening objects with booking urls' do

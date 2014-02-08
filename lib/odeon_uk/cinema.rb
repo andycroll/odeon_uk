@@ -104,7 +104,7 @@ module OdeonUk
     # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.screenings
-    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
+    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." variant="...">, <OdeonUk::Screening ...>]
     def screenings
       film_nodes.map do |node|
         parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
@@ -122,10 +122,10 @@ module OdeonUk
     # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.screenings_of('Iron Man 3')
-    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
+    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." variant="...">, <OdeonUk::Screening ...>]
     #   iron_man_3 = OdeonUk::Film.new "Iron Man 3"
     #   cinema.screenings_of(iron_man_3)
-    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." varient="...">, <OdeonUk::Screening ...>]
+    #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." variant="...">, <OdeonUk::Screening ...>]
     def screenings_of film
       film_name = (film.is_a?(OdeonUk::Film) ? film.name : film)
       screenings.select { |s| s.film_name == film_name }
