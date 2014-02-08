@@ -134,6 +134,23 @@ describe OdeonUk::Cinema do
     end
   end
 
+  describe '#full_name' do
+    subject { cinema.full_name }
+
+    describe 'simple name (brighton)' do
+      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
+
+      before do
+        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
+        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+      end
+
+      it 'returns the brand in the name' do
+        subject.must_equal 'Odeon Brighton'
+      end
+    end
+  end
+
   describe '#locality' do
     describe 'short address' do
       let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }

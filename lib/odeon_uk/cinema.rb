@@ -78,6 +78,16 @@ module OdeonUk
       end.uniq
     end
 
+    # The name of the cinema including the brand
+    # @return [String]
+    # @example
+    #   cinema = OdeonUk::Cinema.find('71')
+    #   cinema.full_name
+    #   #=> 'Odeon Brighton'
+    def full_name
+      "#{brand} #{name}"
+    end
+
     # The locality (town) of the cinema
     # @return [String]
     # @example
