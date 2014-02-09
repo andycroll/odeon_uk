@@ -64,6 +64,7 @@ module OdeonUk
         country: 'United Kingdom'
       }
     end
+    alias_method :address, :adr
 
     # Films with showings scheduled at this cinema
     # @return [Array<OdeonUk::Film>]
