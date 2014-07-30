@@ -171,7 +171,7 @@ module OdeonUk
     end
 
     def self.sitemap_response
-      @sitemap_response ||= HTTParty.get('http://www.odeon.co.uk/sitemap/')
+      @sitemap_response ||= OdeonUk::Internal::Website.new.sitemap
     end
 
     def address_node
@@ -179,7 +179,7 @@ module OdeonUk
     end
 
     def cinema_response
-      @cinema_response ||= HTTParty.get(@url)
+      @cinema_response ||= OdeonUk::Internal::Website.new.cinema(@id)
     end
 
     def parsed_cinema
@@ -195,7 +195,7 @@ module OdeonUk
     end
 
     def showtimes_response
-      @showtimes_response ||= HTTParty.get("http://www.odeon.co.uk/showtimes/week/#{@id}?siteId=#{@id}")
+      @showtimes_response ||= OdeonUk::Internal::Website.new.showtimes(@id)
     end
   end
 end
