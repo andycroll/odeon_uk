@@ -36,11 +36,11 @@ describe OdeonUk::Internal::Website do
   private
 
   def brighton_cinema_html
-    read_file('../../../../fixtures/brighton-cinema.html')
+    read_file('../../../../fixtures/cinema/brighton.html')
   end
 
   def brighton_showtimes_html
-    read_file('../../../../fixtures/brighton-showtimes.html')
+    read_file('../../../../fixtures/showtimes/brighton.html')
   end
 
   def read_file(filepath)
