@@ -1,7 +1,11 @@
 ## HEAD
 
 - add website utility class
-
+- break up film parsing into internal classes
+- Film#at builds films not cinema
+- fixture update script
+- title sanitizer class
+- updated fixtures
 - Added changelog
 
 ## 1.1.3, _8th Nov 2013_
