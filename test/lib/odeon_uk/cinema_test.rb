@@ -1,136 +1,114 @@
 require_relative '../../test_helper'
 
 describe OdeonUk::Cinema do
+  let(:described_class) { OdeonUk::Cinema }
 
-  before { WebMock.disable_net_connect! }
+  let(:website) { Minitest::Mock.new }
+
+  before do
+    WebMock.disable_net_connect!
+  end
 
   describe '.all' do
-    subject { OdeonUk::Cinema.all }
+    subject { described_class.all }
 
     before do
-      sitemap_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-sitemap.html') )
-      stub_request(:get, 'http://www.odeon.co.uk/sitemap/').to_return( status: 200, body: sitemap_body, headers: {} )
+      website.expect(:sitemap, sitemap_html)
     end
 
-    it 'returns an Array of Odeon::Cinemas' do
-      subject.must_be_instance_of(Array)
-      subject.each do |value|
-        value.must_be_instance_of(OdeonUk::Cinema)
+    it 'returns an Array of OdeonUk::Cinemas' do
+      OdeonUk::Internal::Website.stub :new, website do
+        subject.must_be_instance_of(Array)
+        subject.each do |value|
+          value.must_be_instance_of(described_class)
+        end
       end
     end
 
     it 'returns the correctly sized array' do
-      subject.size.must_equal 114
+      OdeonUk::Internal::Website.stub :new, website do
+        subject.size.must_equal 115
+      end
     end
   end
 
   describe '.find(id)' do
-    subject { OdeonUk::Cinema.find(id) }
-
-    before do
-      sitemap_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-sitemap.html') )
-      stub_request(:get, 'http://www.odeon.co.uk/sitemap/').to_return( status: 200, body: sitemap_body, headers: {} )
-    end
+    subject { described_class.find(id) }
 
     describe 'Brighton' do
       let(:id) { 71 }
 
-      it 'returns a cinema' do
-        subject.must_be_instance_of(OdeonUk::Cinema)
-
-        subject.id.must_equal 71
-        subject.brand.must_equal 'Odeon'
-        subject.name.must_equal 'Brighton'
-        subject.slug.must_equal 'brighton'
-        subject.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
+      before do
+        website.expect(:sitemap, sitemap_html)
+        # website.expect(:cinemas, cinema_html('brighton'), [71])
       end
-    end
 
-    describe 'Leicester Square' do
-      let(:id) { 105 }
+      it 'returns a cinema' do
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_be_instance_of(described_class)
 
-      it 'returns a cinema with London prefix removed in the name' do
-        subject.must_be_instance_of(OdeonUk::Cinema)
-
-        subject.id.must_equal 105
-        subject.brand.must_equal 'Odeon'
-        subject.name.must_equal 'Leicester Square'
-        subject.slug.must_equal 'leicester-square'
-        subject.url.must_equal 'http://www.odeon.co.uk/cinemas/london_leicester_square/105/'
+          subject.id.must_equal 71
+          subject.brand.must_equal 'Odeon'
+          subject.name.must_equal 'Brighton'
+          subject.slug.must_equal 'brighton'
+          subject.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
+        end
       end
     end
   end
 
-  describe '.new id, name, url' do
-    it 'stores id, name, slug and url' do
-      cinema = OdeonUk::Cinema.new '23', 'Brighton & Hove', '/cinemas/brighton/71/'
-      cinema.id.must_equal 23
-      cinema.brand.must_equal 'Odeon'
-      cinema.name.must_equal 'Brighton & Hove'
-      cinema.slug.must_equal 'brighton-hove'
-      cinema.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
+  describe '.new' do
+    it 'removes "London" name prefix' do
+      cinema = OdeonUk::Cinema.new 79, 'London - Leicester Square', '/cinemas/london_leicester_square/105/'
+      cinema.id.must_equal 79
+      cinema.name.must_equal 'Leicester Square'
+      cinema.slug.must_equal 'leicester-square'
+    end
+
+    it 'removes " - " and replaces it with a colon ": "' do
+      cinema = OdeonUk::Cinema.new 208, 'Whiteleys - The Lounge', '/cinemas/whiteleys_the_lounge/208/'
+      cinema.id.must_equal 208
+      cinema.name.must_equal 'Whiteleys: The Lounge'
+      cinema.slug.must_equal 'whiteleys-the-lounge'
     end
   end
 
   describe '#adr' do
-    describe 'short address' do
-      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
-      subject { cinema.adr }
+    subject { cinema.adr }
+
+    describe '(brighton)' do
+      let(:cinema) do
+        described_class.new(71, 'Brighton', '/cinemas/brighton/71/')
+      end
 
       before do
-        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+        website.expect(:cinema, cinema_html('brighton'), [71])
       end
 
-      it 'returns a Hash' do
-        subject.must_be_instance_of Hash
-      end
-
-      it 'returns address hash' do
-        subject.must_equal({
-          street_address: 'Kingswest',
-          locality: 'Brighton',
-          postal_code: 'BN1 2RE',
-          country: 'United Kingdom'
-        })
+      it 'returns the address hash' do
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal(
+            street_address: 'Kingswest',
+            locality: 'Brighton',
+            postal_code: 'BN1 2RE',
+            country: 'United Kingdom'
+          )
+        end
       end
     end
   end
 
   describe '#films' do
-    let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton & Hove', '/cinemas/brighton/71/') }
     subject { cinema.films }
 
-    before do
-      brighton_screenings_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton-showtimes.html') )
-      stub_request(:get, 'http://www.odeon.co.uk/showtimes/week/71?siteId=71').to_return( status: 200, body: brighton_screenings_body, headers: {} )
+    let(:cinema) do
+      described_class.new(71, 'Brighton', '/cinemas/brighton/71/')
     end
 
-    it 'returns an array of films' do
-      subject.must_be_instance_of(Array)
-      subject.each do |item|
-        item.must_be_instance_of(OdeonUk::Film)
+    it 'calls out to Screening object' do
+      OdeonUk::Film.stub :at, [:film] do
+        subject.must_equal([:film])
       end
-    end
-
-    it 'returns correct number of films' do
-      subject.count.must_equal 16
-    end
-
-    it 'returns uniquely named films' do
-      subject.each_with_index do |item, index|
-        subject.each_with_index do |jtem, i|
-          if index != i
-            item.name.wont_equal jtem.name
-            item.wont_equal jtem
-          end
-        end
-      end
-    end
-
-    it 'returns film objects with correct names' do
-      subject.first.name.must_equal 'About Time'
-      subject.last.name.must_equal 'White House Down'
     end
   end
 
@@ -138,221 +116,141 @@ describe OdeonUk::Cinema do
     subject { cinema.full_name }
 
     describe 'simple name (brighton)' do
-      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
+      let(:cinema) do
+        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
+      end
 
       before do
-        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+        website.expect(:cinema, cinema_html('brighton'), [71])
       end
 
       it 'returns the brand in the name' do
-        subject.must_equal 'Odeon Brighton'
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal 'Odeon Brighton'
+        end
       end
     end
   end
 
   describe '#locality' do
-    describe 'short address' do
-      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
-      subject { cinema.locality }
+    subject { cinema.locality }
 
-      before do
-        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+    describe 'short address' do
+      let(:cinema) do
+        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
-      it 'returns a string' do
-        subject.must_be_instance_of String
+      before do
+        website.expect(:cinema, cinema_html('brighton'), [71])
       end
 
       it 'returns town name' do
-        subject.must_equal 'Brighton'
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal 'Brighton'
+        end
       end
     end
   end
 
   describe '#postal_code' do
-    describe 'short address' do
-      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
-      subject { cinema.postal_code }
+    subject { cinema.postal_code }
 
-      before do
-        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+    describe 'short address' do
+      let(:cinema) do
+        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
-      it 'returns a string' do
-        subject.must_be_instance_of String
+      before do
+        website.expect(:cinema, cinema_html('brighton'), [71])
       end
 
       it 'returns the postcode' do
-        subject.must_equal 'BN1 2RE'
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal 'BN1 2RE'
+        end
       end
     end
 
     describe 'short address (London)' do
-      let(:cinema) { OdeonUk::Cinema.new('211', 'BFI Imax', '/cinemas/bfi_imax/211/') }
-      subject { cinema.postal_code }
+      let(:cinema) do
+        OdeonUk::Cinema.new('211', 'BFI Imax', '/cinemas/bfi_imax/211/')
+      end
 
       before do
-        body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-bfi-imax.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/bfi_imax/211/').to_return( status: 200, body: body, headers: {} )
+        website.expect(:cinema, cinema_html('bfi_imax'), [211])
       end
 
       it 'returns the postcode' do
-        subject.must_equal 'SE1 8XR'
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal 'SE1 8XR'
+        end
       end
     end
 
     describe 'short address (extra London Postcode)' do
-      let(:cinema) { OdeonUk::Cinema.new('105', 'Leicester Square', '/cinemas/london_leicester_square/105/') }
-      subject { cinema.postal_code }
+      let(:cinema) do
+        OdeonUk::Cinema.new('105',
+                            'Leicester Square',
+                            '/cinemas/london_leicester_square/105/')
+      end
 
       before do
-        body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-london-leicester-square.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/london_leicester_square/105/').to_return( status: 200, body: body, headers: {} )
+        website.expect(:cinema, cinema_html('leicester_square'), [105])
       end
 
       it 'returns the postcode' do
-        subject.must_equal 'WC2H 7LQ'
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal 'WC2H 7LQ'
+        end
       end
     end
   end
 
   describe '#screenings' do
-    let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
     subject { cinema.screenings }
 
-    before do
-      brighton_screenings_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton-showtimes.html') )
-      stub_request(:get, 'http://www.odeon.co.uk/showtimes/week/71?siteId=71').to_return( status: 200, body: brighton_screenings_body, headers: {} )
+    let(:cinema) do
+      described_class.new(71, 'Brighton', '/cinemas/brighton/71/')
     end
 
-    it 'returns an array of screenings' do
-      subject.must_be_instance_of(Array)
-      subject.each do |item|
-        item.must_be_instance_of(OdeonUk::Screening)
-      end
-    end
-
-    it 'returns screening objects with correct film names' do
-      subject.first.film_name.must_equal 'About Time'
-      subject.last.film_name.must_equal 'White House Down'
-    end
-
-    it 'returns screening objects with correct cinema name' do
-      subject.each { |s| s.cinema_name.must_equal 'Brighton' }
-    end
-
-    it 'returns screening objects with correct UTC times' do
-      subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
-      subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 40, 0)
-    end
-
-    it 'returns screening objects with correct variants' do
-      subject.each do |screening|
-        screening.variant.wont_be_nil
-        screening.variant.must_match /[23]D/
-      end
-
-      subject.first.variant.must_equal '2D'
-      subject.last.variant.must_equal '2D'
-    end
-
-    it 'returns screening objects with booking urls' do
-      subject.each do |screening|
-        screening.booking_url.wont_be_nil
-        screening.booking_url.must_be_instance_of String
-      end
-
-      subject.first.booking_url.must_equal 'http://www.odeon.co.uk/booking/init/MUZFRjAwMDAwMjNVRFBETVhHIzcxIzE0NDI2/'
-      subject.last.booking_url.must_equal 'http://www.odeon.co.uk/booking/init/RjhFRjAwMDAwMjNVRFBETVhHIzcxIzEzOTY3/'
-    end
-  end
-
-  describe '#screenings_of(film_or_string)' do
-    let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
-    subject { cinema.screenings_of(film_or_string) }
-
-    before do
-      brighton_screenings_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton-showtimes.html') )
-      stub_request(:get, 'http://www.odeon.co.uk/showtimes/week/71?siteId=71').to_return( status: 200, body: brighton_screenings_body, headers: {} )
-    end
-
-    describe 'passed string' do
-      let(:film_or_string) { 'About Time' }
-
-      it 'returns an array of screenings' do
-        subject.must_be_instance_of(Array)
-        subject.each do |item|
-          item.must_be_instance_of(OdeonUk::Screening)
-        end
-      end
-
-      it 'returns the correct number of screening objects' do
-        subject.count.must_equal 21
-      end
-
-      it 'returns screening objects with correct film names' do
-        subject.each { |s| s.film_name.must_equal 'About Time' }
-      end
-
-      it 'returns screening objects with correct cinema name' do
-        subject.each { |s| s.cinema_name.must_equal 'Brighton' }
-      end
-
-      it 'returns screening objects with correct UTC times' do
-        subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
-        subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 30, 0)
-      end
-    end
-
-    describe 'passed OdeonUk::Film' do
-      let(:film_or_string) { OdeonUk::Film.new 'About Time' }
-
-      it 'returns an array of screenings' do
-        subject.must_be_instance_of(Array)
-        subject.each do |item|
-          item.must_be_instance_of(OdeonUk::Screening)
-        end
-      end
-
-      it 'returns the correct number of screening objects' do
-        subject.count.must_equal 21
-      end
-
-      it 'returns screening objects with correct film names' do
-        subject.each { |s| s.film_name.must_equal 'About Time' }
-      end
-
-      it 'returns screening objects with correct cinema name' do
-        subject.each { |s| s.cinema_name.must_equal 'Brighton' }
-      end
-
-      it 'returns screening objects with correct UTC times' do
-        subject.first.when.must_equal Time.utc(2013, 9, 14, 11, 20, 0)
-        subject.last.when.must_equal Time.utc(2013, 9, 19, 19, 30, 0)
+    it 'calls out to Screening object' do
+      OdeonUk::Screening.stub :at, [:screening] do
+        subject.must_equal([:screening])
       end
     end
   end
 
   describe '#street_address' do
-    describe 'short address' do
-      let(:cinema) { OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/') }
-      subject { cinema.street_address }
+    subject { cinema.street_address }
 
-      before do
-        brighton_cinema_body = File.read( File.join(File.dirname(__FILE__), '..', '..', 'fixtures', 'odeon-brighton.html') )
-        stub_request(:get, 'http://www.odeon.co.uk/cinemas/brighton/71/').to_return( status: 200, body: brighton_cinema_body, headers: {} )
+    describe 'short address' do
+      let(:cinema) do
+        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
-      it 'returns a string' do
-        subject.must_be_instance_of String
+      before do
+        website.expect(:cinema, cinema_html('brighton'), [71])
       end
 
       it 'returns first line of address' do
-        subject.must_equal 'Kingswest'
+        OdeonUk::Internal::Website.stub :new, website do
+          subject.must_equal 'Kingswest'
+        end
       end
     end
+  end
+
+  private
+
+  def read_file(filepath)
+    File.read(File.expand_path(filepath, __FILE__))
+  end
+
+  def sitemap_html
+    read_file('../../../fixtures/sitemap.html')
+  end
+
+  def cinema_html(filename)
+    read_file("../../../fixtures/cinema/#{filename}.html")
   end
 end

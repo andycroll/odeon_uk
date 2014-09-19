@@ -21,7 +21,7 @@ module OdeonUk
     def initialize(id, name, url)
       @brand = 'Odeon'
       @id    = id.to_i
-      @name  = name.gsub('London - ','')
+      @name  = name.gsub('London - ', '').gsub(' - ', ': ')
       @slug  = @name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
       @url   = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
     end
@@ -66,17 +66,8 @@ module OdeonUk
     end
     alias_method :address, :adr
 
-    # Films with showings scheduled at this cinema
-    # @return [Array<OdeonUk::Film>]
-    # @example
-    #   cinema = OdeonUk::Cinema.find('71')
-    #   cinema.films
-    #   #=> [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek Into Darkness">]
     def films
-      film_nodes.map do |node|
-        parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
-        OdeonUk::Film.new parser.film_name
-      end.uniq
+      Film.at(id)
     end
 
     # The name of the cinema including the brand
@@ -117,14 +108,7 @@ module OdeonUk
     #   cinema.screenings
     #   #=> [<OdeonUk::Screening film_name="Iron Man 3" cinema_name="Brighton" when="..." variant="...">, <OdeonUk::Screening ...>]
     def screenings
-      film_nodes.map do |node|
-        parser = OdeonUk::Internal::FilmWithScreeningsParser.new node.to_s
-        parser.showings.map do |screening_type, times_urls|
-          times_urls.map do |array|
-            OdeonUk::Screening.new parser.film_name, self.name, array[0], array[1], screening_type
-          end
-        end
-      end.flatten
+      Screening.at(id)
     end
 
     # Screenings for particular film
@@ -155,7 +139,7 @@ module OdeonUk
     private
 
     def self.cinema_links
-      links = parsed_sitemap.css('.sitemap > .span12:nth-child(4) a[href*=cinemas]')
+      links = parsed_sitemap.css('.sitemap a[href*=cinemas]')
       links.select { |link| link.get_attribute('href').match(/\/\d+\/$/) }
     end
 
@@ -184,18 +168,6 @@ module OdeonUk
 
     def parsed_cinema
       Nokogiri::HTML(cinema_response)
-    end
-
-    def film_nodes
-      parsed_showtimes.css('.film-detail')
-    end
-
-    def parsed_showtimes
-      Nokogiri::HTML(showtimes_response)
-    end
-
-    def showtimes_response
-      @showtimes_response ||= OdeonUk::Internal::Website.new.showtimes(@id)
     end
   end
 end
