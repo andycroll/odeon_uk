@@ -1,5 +1,4 @@
 module OdeonUk
-
   # The object representing a film on the Odeon UK website
   class Film
     include Comparable
@@ -16,11 +15,20 @@ module OdeonUk
       @slug = name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
     end
 
+    # All currently listed films showing at a cinema
+    # @param [Integer] cinema_id id of the cinema on the website
+    # @return [Array<OdeonUk::Film>]
+    def self.at(cinema_id)
+      showtimes_page(cinema_id).to_a.map do |html|
+        new(screenings_parser(html).film_name)
+      end
+    end
+
     # Allows sort on objects
     # @param [OdeonUk::Film] other another film object
     # @return [Integer] -1, 0 or 1
-    def <=> other
-      self.slug <=> other.slug
+    def <=>(other)
+      slug <=> other.slug
     end
 
     # Check an object is the same as another object.
@@ -28,7 +36,7 @@ module OdeonUk
     # @return [Boolean] True if both objects are the same exact object, or if
     #   they are of the same type and share an equal slug
     # @note Guided by http://woss.name/2011/01/20/equality-comparison-and-ordering-in-ruby/
-    def eql? other
+    def eql?(other)
       self.class == other.class && self == other
     end
 
@@ -41,7 +49,17 @@ module OdeonUk
     # @return [Integer] hash of slug
     # @note Guided by http://woss.name/2011/01/20/equality-comparison-and-ordering-in-ruby/
     def hash
-      self.slug.hash
+      slug.hash
+    end
+
+    private
+
+    def self.screenings_parser(html)
+      OdeonUk::Internal::FilmWithScreeningsParser.new(html)
+    end
+
+    def self.showtimes_page(cinema_id)
+      OdeonUk::Internal::ShowtimesPage.new(cinema_id)
     end
   end
 end
