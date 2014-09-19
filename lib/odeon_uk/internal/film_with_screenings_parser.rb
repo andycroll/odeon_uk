@@ -4,10 +4,12 @@ module OdeonUk
   module Internal
     # Parses a chunk of HTML to derive movie showing data
     class FilmWithScreeningsParser
+      # CSS selector for a film title inside an individual film HTML
       NAME_CSS      = '.presentation-info h4 a'
+      # CSS selector for a group of showtimes inside an individual film HTML
       SHOWTIMES_CSS = '.times-all.accordion-group'
 
-      # @param [String] film_html a chunk of html
+      # @param [String] html a chunk of html
       def initialize(html)
         @html = html
       end
@@ -22,7 +24,7 @@ module OdeonUk
       # @return [Array<Hash>]
       def to_a
         doc.css(SHOWTIMES_CSS).map do |node|
-          dimension_parser(node).map do |hash|
+          dimension_parser(node).to_a.map do |hash|
             hash.merge(film_name: film_name)
           end
         end.flatten
@@ -39,22 +41,25 @@ module OdeonUk
       end
 
       def dimension_parser(node)
-        DimensionNodeParser.new(node).to_hash
+        DimensionNodeParser.new(node)
       end
     end
 
     # parses chunk of screenings for a particular screening dimension
     class DimensionNodeParser
+      # CSS selector for a single screening inside a 'group of showtimes' HTML
       SCREENING_CSS = '.show'
+      # CSS selector for showing technology for a 'group of showtimes' HTML
       TECH_CSS = '.tech a'
 
+      # @param [Nokigiri::Node] node a Nokogiri node object
       def initialize(node)
         @node = node
       end
 
       # array containing hashes of screening attributes for dimension
       # @return [Array<Hash>]
-      def to_hash
+      def to_a
         screening_hashes.map do |hash|
           hash.merge(
             dimension: dimension,
@@ -92,13 +97,18 @@ module OdeonUk
 
     # parses a single screening
     class ScreeningNodeParser
+      # regex for time format
       TIME_REGEX = %r(\d+/\d+/\d+ \d{2}\:\d{2})
+      # regex for D-Box screenings
       DBOX_REGEX = /D-Box/
 
+      # @param [Nokigiri::Node] node a Nokogiri node object
       def initialize(node)
         @node = node
       end
 
+      # hashes of screening attributes
+      # @return [Hash]
       def to_hash
         {
           booking_url: booking_url,

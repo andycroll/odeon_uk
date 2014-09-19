@@ -12,7 +12,7 @@ module OdeonUk
         @cinema_id = cinema_id
       end
 
-      # break up the whats on page into individual chunks for each film
+      # break up the showtimes page into individual chunks for each film
       # @return [Array<String>] html chunks for a film and it's screenings
       def to_a
         film_nodes.map { |node| node.to_s.gsub(/^\s+/, '') }

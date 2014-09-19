@@ -4,6 +4,7 @@ module OdeonUk
   module Internal
     # Sanitize and standardize film titles
     class TitleSanitizer
+      # strings and regex to be removed
       REMOVE = [
         /\s+[23][dD]/,                 # dimension
         'Autism Friendly Screening -', # autism screening
@@ -13,6 +14,7 @@ module OdeonUk
         'UKJFF -',                     # UK Jewish festival prefix
       ]
 
+      # regexes and their replacements
       REPLACE = {
         /Bolshoi - (.*)/               => 'Bolshoi: ',
         /Globe On Screen: (.*)/        => 'Globe: ',
@@ -23,10 +25,13 @@ module OdeonUk
         /(.*)\- RSC Live \d{1,4}/      => 'Royal Shakespeare Company: '
       }
 
+      # @param [String] title a film title
       def initialize(title)
         @title = title
       end
 
+      # sanitized and standardized title
+      # @return [String] title
       def sanitized
         @sanitzed ||= begin
           sanitized = @title

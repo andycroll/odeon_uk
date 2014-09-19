@@ -1,8 +1,6 @@
 module OdeonUk
-
   # The object representing a cinema on the Odeon UK website
   class Cinema
-
     # @return [String] the brand of the cinema
     attr_reader :brand
     # @return [Integer] the numeric id of the cinema on the Odeon website
@@ -22,15 +20,12 @@ module OdeonUk
       @brand = 'Odeon'
       @id    = id.to_i
       @name  = name.gsub('London - ', '').gsub(' - ', ': ')
-      @slug  = @name.downcase.gsub(/[^0-9a-z ]/,'').gsub(/\s+/, '-')
+      @slug  = @name.downcase.gsub(/[^0-9a-z ]/, '').gsub(/\s+/, '-')
       @url   = (url[0] == '/') ? "http://www.odeon.co.uk#{url}" : url
     end
 
     # Return basic cinema information for all cinemas
     # @return [Array<OdeonUk::Cinema>]
-    # @example
-    #   OdeonUk::Cinema.all
-    #   #=> [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" id=23 url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
     def self.all
       cinema_links.map do |link|
         new_from_link link
@@ -38,11 +33,12 @@ module OdeonUk
     end
 
     # Find a single cinema
-    # @param [Integer, String] id the cinema id of the format 71/'71' as used on the odeon.co.uk website
+    # @param [Integer, String] id the cinema id of the format 71/'71' as used on
+    # the odeon.co.uk website
     # @return [OdeonUk::Cinema, nil]
     # @example
     #   OdeonUk::Cinema.find('71')
-    #   #=> <OdeonUk::Cinema brand="Odeon" name="Brighton" slug="brighton" id=71 url="...">
+    #   #=> <OdeonUk::Cinema brand="Odeon" name="Brighton" slug="brighton" ...>
     def self.find(id)
       id = id.to_i
       return nil unless id > 0
@@ -55,7 +51,10 @@ module OdeonUk
     # @example
     #   cinema = OdeonUk::Cinema.find('71')
     #   cinema.adr
-    #   #=> { street_address: 'Kingswest', locality: 'Brighton', postal_code: 'BN1 2RE', country_name: 'United Kingdom' }
+    #   #=> { street_address: 'Kingswest',
+    #         locality: 'Brighton',
+    #         postal_code: 'BN1 2RE',
+    #         country_name: 'United Kingdom' }
     def adr
       {
         street_address: street_address,
@@ -66,6 +65,8 @@ module OdeonUk
     end
     alias_method :address, :adr
 
+    # Films with showings scheduled at this cinema
+    # @return [Array<OdeonUk::Film>]
     def films
       Film.at(id)
     end
@@ -89,7 +90,6 @@ module OdeonUk
     def locality
       address_node.text.match(/\w+(\s\w+){0,}\s+(\w+(\s\w+){0,})/)[2]
     end
-
 
     # Post code of the cinema
     # @return [String]

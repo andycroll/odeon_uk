@@ -7,7 +7,7 @@ module OdeonUk
     # Utility class to make calls to the odeon website
     class Website
       # cinema page
-      # @param [Integer] cineman_id website id of the cinema
+      # @param [Integer] cinema_id website id of the cinema
       # @return [String] html of the page
       def cinema(cinema_id)
         get("cinemas/odeon/#{cinema_id}/")

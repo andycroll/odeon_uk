@@ -1,8 +1,6 @@
 module OdeonUk
   # The object representing a single screening of a film on the Odeon UK website
   class Screening
-    FILM_CSS = '.film-detail'
-
     # @return [String] the booking URL on the cinema website
     attr_reader :booking_url
     # @return [String] 2d or 3d
