@@ -3,7 +3,7 @@ module OdeonUk
   # @api private
   module Internal
     # Parses a chunk of HTML to derive showing data for a single films
-    class ShowtimesParser
+    class ShowtimesPage
       # css selector for film html chunks
       FILM_CSS = '.film-detail'
 
@@ -14,11 +14,15 @@ module OdeonUk
 
       # break up the whats on page into individual chunks for each film
       # @return [Array<String>] html chunks for a film and it's screenings
-      def films_with_screenings
-        showtimes_doc.css(FILM_CSS).map { |n| n.to_s.gsub(/^\s+/, '') }
+      def to_a
+        film_nodes.map { |node| node.to_s.gsub(/^\s+/, '') }
       end
 
       private
+
+      def film_nodes
+        @film_nodes ||= showtimes_doc.css(FILM_CSS)
+      end
 
       def showtimes
         @showtimes ||= OdeonUk::Internal::Website.new.showtimes(@cinema_id)

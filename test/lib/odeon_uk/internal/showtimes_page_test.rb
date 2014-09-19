@@ -1,14 +1,14 @@
 require_relative '../../../test_helper'
 
-describe OdeonUk::Internal::ShowtimesParser do
-  let(:described_class) { OdeonUk::Internal::ShowtimesParser }
+describe OdeonUk::Internal::ShowtimesPage do
+  let(:described_class) { OdeonUk::Internal::ShowtimesPage }
 
   let(:website) { Minitest::Mock.new }
 
   before { WebMock.disable_net_connect! }
 
-  describe '#films_with_screenings' do
-    subject { described_class.new(71).films_with_screenings }
+  describe '#to_a' do
+    subject { described_class.new(71).to_a }
 
     before do
       website.expect(:showtimes, brighton_showtimes_html, [71])
@@ -46,6 +46,6 @@ describe OdeonUk::Internal::ShowtimesParser do
   end
 
   def brighton_showtimes_html
-    read_file('../../../../fixtures/brighton-showtimes.html')
+    read_file('../../../../fixtures/showtimes/brighton.html')
   end
 end
