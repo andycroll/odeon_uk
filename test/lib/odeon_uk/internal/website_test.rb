@@ -6,7 +6,7 @@ describe OdeonUk::Internal::Website do
   describe '#cinema(id)' do
     subject { described_class.new.cinema(71) }
 
-    before { stub_get('cinemas/odeon/71', brighton_cinema_html) }
+    before { stub_get('cinemas/odeon/71/', brighton_cinema_html) }
 
     it 'returns a string' do
       subject.class.must_equal String
@@ -26,7 +26,7 @@ describe OdeonUk::Internal::Website do
   describe '#showtimes(id)' do
     subject { described_class.new.showtimes(71) }
 
-    before { stub_get('showtimes/week/71?siteId=71', brighton_showtimes_html) }
+    before { stub_get('showtimes/week/71/?siteId=71', brighton_showtimes_html) }
 
     it 'returns a string' do
       subject.class.must_equal String
