@@ -1,4 +1,4 @@
-## HEAD
+## 2.0.0, _22nd September 2014_
 
 - add website utility class
 - break up film parsing into internal classes

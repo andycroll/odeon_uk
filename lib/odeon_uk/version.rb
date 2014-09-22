@@ -1,6 +1,6 @@
 # Ruby interface for http://www.odeon.co.uk
-# @version 1.1.5
+# @version 2.0.0
 module OdeonUk
   # Gem version
-  VERSION = "1.1.5"
+  VERSION = '2.0.0'
 end
