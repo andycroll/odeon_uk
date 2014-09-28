@@ -1,4 +1,4 @@
-## HEAD
+## 2.0.1, _28th September 2014_
 
 - you can pass strings to screening#variant
 
