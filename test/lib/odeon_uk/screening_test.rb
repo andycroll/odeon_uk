@@ -52,22 +52,44 @@ describe OdeonUk::Screening do
   describe '#variant' do
     subject { described_class.new(options).variant }
 
-    let(:options) do
-      {
-        film_name:   'Guardians of the Galaxy',
-        cinema_id:   71,
-        cinema_name: 'Odeon Brighton',
-        time:        Time.utc(2014, 9, 12, 11, 0),
-        variant:     ['Kids', 'BABY']
-      }
+    describe 'passed array' do
+      let(:options) do
+        {
+          film_name:   'Guardians of the Galaxy',
+          cinema_id:   71,
+          cinema_name: 'Odeon Brighton',
+          time:        Time.utc(2014, 9, 12, 11, 0),
+          variant:     %w(Kids BABY)
+        }
+      end
+
+      it 'is an alphabetically ordered array of lower-cased strings' do
+        subject.must_be_instance_of Array
+        subject.each do |tag|
+          tag.must_be_instance_of String
+        end
+        subject.must_equal %w(baby kids)
+      end
     end
 
-    it 'is an alphabetically ordered array of lower-cased strings' do
-      subject.must_be_instance_of Array
-      subject.each do |tag|
-        tag.must_be_instance_of String
+    describe 'passed string' do
+      let(:options) do
+        {
+          film_name:   'Guardians of the Galaxy',
+          cinema_id:   71,
+          cinema_name: 'Odeon Brighton',
+          time:        Time.utc(2014, 9, 12, 11, 0),
+          variant:     'Kids BABY'
+        }
       end
-      subject.must_equal %w(baby kids)
+
+      it 'is an alphabetically ordered array of lower-cased strings' do
+        subject.must_be_instance_of Array
+        subject.each do |tag|
+          tag.must_be_instance_of String
+        end
+        subject.must_equal %w(baby kids)
+      end
     end
   end
 

@@ -54,6 +54,7 @@ module OdeonUk
     # The kinds of screening
     # @return <Array[String]>
     def variant
+      @variant = @variant.split(' ') if @variant.is_a?(String)
       @variant.map(&:downcase).sort
     end
 
