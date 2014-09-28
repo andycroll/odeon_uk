@@ -75,7 +75,11 @@ module OdeonUk
       end
 
       def dimension
-        tech.match(/[23]d/)[0]
+        dimension_from_tech || '2d'
+      end
+
+      def dimension_from_tech
+        tech.match(/[23]d/i) { |data| data[0] }
       end
 
       def imax?
