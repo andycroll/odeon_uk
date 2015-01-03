@@ -12,6 +12,7 @@ module OdeonUk
         /\(encore.+\)/i,               # encore for NT Live
         /\(live\)/i,                   # live in brackets
         'UKJFF -',                     # UK Jewish festival prefix
+        /\bsing\-?a\-?long\b/i,        # singalong
       ]
 
       # regexes and their replacements

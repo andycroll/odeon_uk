@@ -101,5 +101,13 @@ describe OdeonUk::Internal::TitleSanitizer do
         subject.must_equal('From Cable Street To Brick Lane')
       end
     end
+
+    describe 'singalong screeening' do
+      let(:title) { 'Frozen Sing-a-long' }
+
+      it 'removes prefix' do
+        subject.must_equal('Frozen')
+      end
+    end
   end
 end

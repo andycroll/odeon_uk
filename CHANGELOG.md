@@ -1,3 +1,7 @@
+## 2.0.3, _3rd January 2015_
+
+- singalong sanitization
+
 ## 2.0.2, _28th September 2014_
 
 - Default to 2d for IMAX film tech
