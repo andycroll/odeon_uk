@@ -88,6 +88,7 @@ module OdeonUk
     #   cinema.locality
     #   #=> 'Brighton'
     def locality
+      return unless address_node
       address_node.text.match(/\w+(\s\w+){0,}\s+(\w+(\s\w+){0,})/)[2]
     end
 
@@ -98,6 +99,7 @@ module OdeonUk
     #   cinema.postal_code
     #   #=> 'BN1 2RE'
     def postal_code
+      return unless address_node
       address_node.text.match(/[A-Z]{1,2}\d{1,2}[A-Z]?\s\d{1,2}[A-Z]{1,2}/)[0]
     end
 
@@ -133,6 +135,7 @@ module OdeonUk
     #   cinema.street_address
     #   #=> 'Kingswest'
     def street_address
+      return unless address_node
       address_node.text.match(/\A\s+(\w+(\s\w+){0,})/)[1]
     end
 

@@ -1,3 +1,7 @@
+## 2.0.4 - 2015-02-18
+
+- protect against unopened cinemas
+
 ## 2.0.3, _3rd January 2015_
 
 - singalong sanitization
