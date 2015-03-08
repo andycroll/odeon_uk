@@ -1,7 +1,7 @@
-require_relative '../../test_helper'
+require_relative '../../../test_helper'
 
-describe OdeonUk::Cinema do
-  let(:described_class) { OdeonUk::Cinema }
+describe OdeonUk::Html::Cinema do
+  let(:described_class) { OdeonUk::Html::Cinema }
 
   let(:website) { Minitest::Mock.new }
 
@@ -16,8 +16,8 @@ describe OdeonUk::Cinema do
       website.expect(:sitemap, sitemap_html)
     end
 
-    it 'returns an Array of OdeonUk::Cinemas' do
-      OdeonUk::Internal::Website.stub :new, website do
+    it 'returns an Array of OdeonUk::Html::Cinemas' do
+      OdeonUk::Html::Website.stub :new, website do
         subject.must_be_instance_of(Array)
         subject.each do |value|
           value.must_be_instance_of(described_class)
@@ -26,7 +26,7 @@ describe OdeonUk::Cinema do
     end
 
     it 'returns the correctly sized array' do
-      OdeonUk::Internal::Website.stub :new, website do
+      OdeonUk::Html::Website.stub :new, website do
         subject.size.must_equal 115
       end
     end
@@ -44,7 +44,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns a cinema' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_be_instance_of(described_class)
 
           subject.id.must_equal 71
@@ -59,14 +59,14 @@ describe OdeonUk::Cinema do
 
   describe '.new' do
     it 'removes "London" name prefix' do
-      cinema = OdeonUk::Cinema.new 79, 'London - Leicester Square', '/cinemas/london_leicester_square/105/'
+      cinema = OdeonUk::Html::Cinema.new 79, 'London - Leicester Square', '/cinemas/london_leicester_square/105/'
       cinema.id.must_equal 79
       cinema.name.must_equal 'Leicester Square'
       cinema.slug.must_equal 'leicester-square'
     end
 
     it 'removes " - " and replaces it with a colon ": "' do
-      cinema = OdeonUk::Cinema.new 208, 'Whiteleys - The Lounge', '/cinemas/whiteleys_the_lounge/208/'
+      cinema = OdeonUk::Html::Cinema.new 208, 'Whiteleys - The Lounge', '/cinemas/whiteleys_the_lounge/208/'
       cinema.id.must_equal 208
       cinema.name.must_equal 'Whiteleys: The Lounge'
       cinema.slug.must_equal 'whiteleys-the-lounge'
@@ -86,7 +86,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns the address hash' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal(
             street_address: 'Kingswest',
             locality: 'Brighton',
@@ -106,7 +106,7 @@ describe OdeonUk::Cinema do
     end
 
     it 'calls out to Screening object' do
-      OdeonUk::Film.stub :at, [:film] do
+      OdeonUk::Html::Film.stub :at, [:film] do
         subject.must_equal([:film])
       end
     end
@@ -117,7 +117,7 @@ describe OdeonUk::Cinema do
 
     describe 'simple name (brighton)' do
       let(:cinema) do
-        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
+        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
       before do
@@ -125,7 +125,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns the brand in the name' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal 'Odeon Brighton'
         end
       end
@@ -137,7 +137,7 @@ describe OdeonUk::Cinema do
 
     describe 'short address' do
       let(:cinema) do
-        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
+        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
       before do
@@ -145,7 +145,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns town name' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal 'Brighton'
         end
       end
@@ -157,7 +157,7 @@ describe OdeonUk::Cinema do
 
     describe 'short address' do
       let(:cinema) do
-        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
+        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
       before do
@@ -165,7 +165,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns the postcode' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal 'BN1 2RE'
         end
       end
@@ -173,7 +173,7 @@ describe OdeonUk::Cinema do
 
     describe 'short address (London)' do
       let(:cinema) do
-        OdeonUk::Cinema.new('211', 'BFI Imax', '/cinemas/bfi_imax/211/')
+        OdeonUk::Html::Cinema.new('211', 'BFI Imax', '/cinemas/bfi_imax/211/')
       end
 
       before do
@@ -181,7 +181,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns the postcode' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal 'SE1 8XR'
         end
       end
@@ -189,7 +189,7 @@ describe OdeonUk::Cinema do
 
     describe 'short address (extra London Postcode)' do
       let(:cinema) do
-        OdeonUk::Cinema.new('105',
+        OdeonUk::Html::Cinema.new('105',
                             'Leicester Square',
                             '/cinemas/london_leicester_square/105/')
       end
@@ -199,7 +199,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns the postcode' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal 'WC2H 7LQ'
         end
       end
@@ -214,7 +214,7 @@ describe OdeonUk::Cinema do
     end
 
     it 'calls out to Screening object' do
-      OdeonUk::Screening.stub :at, [:screening] do
+      OdeonUk::Html::Screening.stub :at, [:screening] do
         subject.must_equal([:screening])
       end
     end
@@ -225,7 +225,7 @@ describe OdeonUk::Cinema do
 
     describe 'short address' do
       let(:cinema) do
-        OdeonUk::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
+        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
       end
 
       before do
@@ -233,7 +233,7 @@ describe OdeonUk::Cinema do
       end
 
       it 'returns first line of address' do
-        OdeonUk::Internal::Website.stub :new, website do
+        OdeonUk::Html::Website.stub :new, website do
           subject.must_equal 'Kingswest'
         end
       end
@@ -247,10 +247,10 @@ describe OdeonUk::Cinema do
   end
 
   def sitemap_html
-    read_file('../../../fixtures/sitemap.html')
+    read_file('../../../../fixtures/sitemap.html')
   end
 
   def cinema_html(filename)
-    read_file("../../../fixtures/cinema/#{filename}.html")
+    read_file("../../../../fixtures/cinema/#{filename}.html")
   end
 end

@@ -3,7 +3,7 @@ require 'open-uri'
 module OdeonUk
   # Internal utility classes: Do not use
   # @api private
-  module Internal
+  module Html
     # Utility class to make calls to the odeon website
     class Website
       # cinema page

@@ -1,7 +1,7 @@
-require_relative '../../../test_helper'
+require_relative '../../../../test_helper'
 
-describe OdeonUk::Internal::FilmWithScreeningsParser do
-  let(:described_class) { OdeonUk::Internal::FilmWithScreeningsParser }
+describe OdeonUk::Html::Parser::FilmWithScreenings do
+  let(:described_class) { OdeonUk::Html::Parser::FilmWithScreenings }
 
   describe '#film_name' do
     subject { described_class.new(film_html).film_name }
@@ -121,7 +121,7 @@ describe OdeonUk::Internal::FilmWithScreeningsParser do
   end
 
   def read_film_html(filename)
-    path = '../../../../fixtures/showtimes'
+    path = '../../../../../fixtures/showtimes'
     File.read(File.expand_path("#{path}/#{filename}.html", __FILE__))
   end
 end

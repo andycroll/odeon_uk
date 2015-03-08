@@ -1,7 +1,7 @@
-require_relative '../../../test_helper'
+require_relative '../../../../test_helper'
 
-describe OdeonUk::Internal::ShowtimesPage do
-  let(:described_class) { OdeonUk::Internal::ShowtimesPage }
+describe OdeonUk::Html::Parser::ShowtimesPage do
+  let(:described_class) { OdeonUk::Html::Parser::ShowtimesPage }
 
   let(:website) { Minitest::Mock.new }
 
@@ -15,7 +15,7 @@ describe OdeonUk::Internal::ShowtimesPage do
     end
 
     it 'returns an non-zero array of film screenings html fragments' do
-      OdeonUk::Internal::Website.stub :new, website do
+      OdeonUk::Html::Website.stub :new, website do
         subject.must_be_instance_of(Array)
         subject.size.must_be :>, 0
 
@@ -27,7 +27,7 @@ describe OdeonUk::Internal::ShowtimesPage do
     end
 
     it 'returns an array with correct content' do
-      OdeonUk::Internal::Website.stub :new, website do
+      OdeonUk::Html::Website.stub :new, website do
         subject.each do |html|
           html.must_include('class="film-detail') # screenings group
           html.must_include('class="presentation-info') # title
@@ -46,6 +46,6 @@ describe OdeonUk::Internal::ShowtimesPage do
   end
 
   def brighton_showtimes_html
-    read_file('../../../../fixtures/showtimes/brighton.html')
+    read_file('../../../../../fixtures/showtimes/brighton.html')
   end
 end

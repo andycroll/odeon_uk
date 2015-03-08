@@ -1,7 +1,7 @@
 require_relative '../../../test_helper'
 
-describe OdeonUk::Internal::Website do
-  let(:described_class) { OdeonUk::Internal::Website }
+describe OdeonUk::Html::Website do
+  let(:described_class) { OdeonUk::Html::Website }
 
   describe '#cinema(id)' do
     subject { described_class.new.cinema(71) }

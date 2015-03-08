@@ -1,7 +1,7 @@
-require_relative '../../test_helper'
+require_relative '../../../test_helper'
 
-describe OdeonUk::Screening do
-  let(:described_class) { OdeonUk::Screening }
+describe OdeonUk::Html::Screening do
+  let(:described_class) { OdeonUk::Html::Screening }
 
   let(:website) { Minitest::Mock.new }
 
@@ -16,7 +16,7 @@ describe OdeonUk::Screening do
     end
 
     it 'returns an array of screenings' do
-      OdeonUk::Internal::Website.stub :new, website do
+      OdeonUk::Html::Website.stub :new, website do
         subject.must_be_instance_of(Array)
         subject.each do |screening|
           screening.must_be_instance_of(described_class)
@@ -25,7 +25,7 @@ describe OdeonUk::Screening do
     end
 
     it 'returns correct number of screenings' do
-      OdeonUk::Internal::Website.stub :new, website do
+      OdeonUk::Html::Website.stub :new, website do
         subject.count.must_equal 214
       end
     end
@@ -96,7 +96,7 @@ describe OdeonUk::Screening do
   private
 
   def brighton_showtimes_html
-    read_file('../../../fixtures/showtimes/brighton.html')
+    read_file('../../../../fixtures/showtimes/brighton.html')
   end
 
   def read_file(filepath)
@@ -104,6 +104,6 @@ describe OdeonUk::Screening do
   end
 
   def sitemap_html
-    read_file('../../../fixtures/sitemap.html')
+    read_file('../../../../fixtures/sitemap.html')
   end
 end
