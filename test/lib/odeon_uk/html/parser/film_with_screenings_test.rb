@@ -10,7 +10,7 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
       let(:film_html) { read_film_html('brighton/film_first') }
 
       it 'returns film name' do
-        subject.must_equal 'A Most Wanted Man'
+        subject.must_equal 'Big Hero 6'
       end
     end
 
@@ -18,7 +18,7 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
       let(:film_html) { read_film_html('brighton/film_last') }
 
       it 'returns film name' do
-        subject.must_equal 'The Riot Club'
+        subject.must_equal 'Unfinished Business'
       end
     end
   end
@@ -48,7 +48,7 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
       end
 
       it 'returns the correct number of screenings' do
-        subject.count.must_equal 10
+        subject.count.must_equal 4
       end
     end
 
@@ -121,7 +121,7 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
   end
 
   def read_film_html(filename)
-    path = '../../../../../fixtures/showtimes'
+    path = '../../../../../fixtures/html/showtimes'
     File.read(File.expand_path("#{path}/#{filename}.html", __FILE__))
   end
 end

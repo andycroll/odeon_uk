@@ -247,10 +247,10 @@ describe OdeonUk::Html::Cinema do
   end
 
   def sitemap_html
-    read_file('../../../../fixtures/sitemap.html')
+    read_file('../../../../fixtures/html/sitemap.html')
   end
 
   def cinema_html(filename)
-    read_file("../../../../fixtures/cinema/#{filename}.html")
+    read_file("../../../../fixtures/html/cinema/#{filename}.html")
   end
 end

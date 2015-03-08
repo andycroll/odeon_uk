@@ -36,11 +36,11 @@ describe OdeonUk::Html::Website do
   private
 
   def brighton_cinema_html
-    read_file('../../../../fixtures/cinema/brighton.html')
+    read_file('../../../../fixtures/html/cinema/brighton.html')
   end
 
   def brighton_showtimes_html
-    read_file('../../../../fixtures/showtimes/brighton.html')
+    read_file('../../../../fixtures/html/showtimes/brighton.html')
   end
 
   def read_file(filepath)
@@ -48,7 +48,7 @@ describe OdeonUk::Html::Website do
   end
 
   def sitemap_html
-    read_file('../../../../fixtures/sitemap.html')
+    read_file('../../../../fixtures/html/sitemap.html')
   end
 
   def stub_get(site_path, response_body)

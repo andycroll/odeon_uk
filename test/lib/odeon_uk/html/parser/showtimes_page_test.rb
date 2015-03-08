@@ -46,6 +46,6 @@ describe OdeonUk::Html::Parser::ShowtimesPage do
   end
 
   def brighton_showtimes_html
-    read_file('../../../../../fixtures/showtimes/brighton.html')
+    read_file('../../../../../fixtures/html/showtimes/brighton.html')
   end
 end

@@ -26,7 +26,7 @@ describe OdeonUk::Html::Screening do
 
     it 'returns correct number of screenings' do
       OdeonUk::Html::Website.stub :new, website do
-        subject.count.must_equal 214
+        subject.count.must_equal 133  
       end
     end
   end
@@ -96,7 +96,7 @@ describe OdeonUk::Html::Screening do
   private
 
   def brighton_showtimes_html
-    read_file('../../../../fixtures/showtimes/brighton.html')
+    read_file('../../../../fixtures/html/showtimes/brighton.html')
   end
 
   def read_file(filepath)
@@ -104,6 +104,6 @@ describe OdeonUk::Html::Screening do
   end
 
   def sitemap_html
-    read_file('../../../../fixtures/sitemap.html')
+    read_file('../../../../fixtures/html/sitemap.html')
   end
 end

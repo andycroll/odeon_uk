@@ -19,7 +19,7 @@ module OdeonUk
         # The film name
         # @return [String]
         def film_name
-          @film_name ||= OdeonUk::Internal::TitleSanitizer.new(raw_film_name).sanitized
+          @film_name ||= Internal::TitleSanitizer.new(raw_film_name).sanitized
         end
 
         # array containing hashes of screening attributes

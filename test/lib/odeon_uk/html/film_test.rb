@@ -137,6 +137,6 @@ describe OdeonUk::Html::Film do
   end
 
   def showtimes_html(filename)
-    read_file("../../../../fixtures/showtimes/#{filename}.html")
+    read_file("../../../../fixtures/html/showtimes/#{filename}.html")
   end
 end
