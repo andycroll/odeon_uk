@@ -8,6 +8,8 @@ require_relative './odeon_uk/configuration'
 
 require_relative './odeon_uk/internal/title_sanitizer'
 
+require_relative './odeon_uk/api/response'
+
 require_relative './odeon_uk/html/parser/film_with_screenings'
 require_relative './odeon_uk/html/website'
 require_relative './odeon_uk/html/cinema'
