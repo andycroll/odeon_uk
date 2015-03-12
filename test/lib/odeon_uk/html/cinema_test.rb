@@ -9,8 +9,8 @@ describe OdeonUk::Html::Cinema do
     WebMock.disable_net_connect!
   end
 
-  describe '.all' do
-    subject { described_class.all }
+  describe '.ids' do
+    subject { described_class.ids }
 
     before do
       website.expect(:sitemap, sitemap_html)
@@ -20,7 +20,7 @@ describe OdeonUk::Html::Cinema do
       OdeonUk::Html::Website.stub :new, website do
         subject.must_be_instance_of(Array)
         subject.each do |value|
-          value.must_be_instance_of(described_class)
+          value.must_be_instance_of(Fixnum)
         end
       end
     end
@@ -32,117 +32,54 @@ describe OdeonUk::Html::Cinema do
     end
   end
 
-  describe '.find(id)' do
-    subject { described_class.find(id) }
+  describe '.new(id)' do
+    subject { described_class.new(id) }
 
     describe 'Brighton' do
       let(:id) { 71 }
 
-      before do
-        website.expect(:sitemap, sitemap_html)
-        # website.expect(:cinemas, cinema_html('brighton'), [71])
-      end
-
       it 'returns a cinema' do
-        OdeonUk::Html::Website.stub :new, website do
-          subject.must_be_instance_of(described_class)
+        subject.must_be_instance_of(described_class)
+        subject.id.must_equal(id)
+      end
+    end
+  end
 
-          subject.id.must_equal 71
-          subject.brand.must_equal 'Odeon'
-          subject.name.must_equal 'Brighton'
-          subject.slug.must_equal 'brighton'
-          subject.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
+  describe '#name' do
+    subject { described_class.new(id).name }
+
+    before { website.expect(:sitemap, sitemap_html) }
+
+    describe 'Brighton' do
+      let(:id) { 71 }
+
+      it 'returns cinema name' do
+        OdeonUk::Html::Website.stub :new, website do
+          subject.must_equal 'Brighton'
         end
       end
     end
-  end
 
-  describe '.new' do
-    it 'removes "London" name prefix' do
-      cinema = OdeonUk::Html::Cinema.new 79, 'London - Leicester Square', '/cinemas/london_leicester_square/105/'
-      cinema.id.must_equal 79
-      cinema.name.must_equal 'Leicester Square'
-      cinema.slug.must_equal 'leicester-square'
-    end
+    describe 'Leicester Square' do
+      let(:id) { 105 }
 
-    it 'removes " - " and replaces it with a colon ": "' do
-      cinema = OdeonUk::Html::Cinema.new 208, 'Whiteleys - The Lounge', '/cinemas/whiteleys_the_lounge/208/'
-      cinema.id.must_equal 208
-      cinema.name.must_equal 'Whiteleys: The Lounge'
-      cinema.slug.must_equal 'whiteleys-the-lounge'
-    end
-  end
-
-  describe '#adr' do
-    subject { cinema.adr }
-
-    describe '(brighton)' do
-      let(:cinema) do
-        described_class.new(71, 'Brighton', '/cinemas/brighton/71/')
-      end
-
-      before do
-        website.expect(:cinema, cinema_html('brighton'), [71])
-      end
-
-      it 'returns the address hash' do
+      it 'returns cinema name' do
         OdeonUk::Html::Website.stub :new, website do
-          subject.must_equal(
-            street_address: 'Kingswest',
-            locality: 'Brighton',
-            postal_code: 'BN1 2RE',
-            country: 'United Kingdom'
-          )
-        end
-      end
-    end
-  end
-
-  describe '#films' do
-    subject { cinema.films }
-
-    let(:cinema) do
-      described_class.new(71, 'Brighton', '/cinemas/brighton/71/')
-    end
-
-    it 'calls out to Screening object' do
-      OdeonUk::Html::Film.stub :at, [:film] do
-        subject.must_equal([:film])
-      end
-    end
-  end
-
-  describe '#full_name' do
-    subject { cinema.full_name }
-
-    describe 'simple name (brighton)' do
-      let(:cinema) do
-        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
-      end
-
-      before do
-        website.expect(:cinema, cinema_html('brighton'), [71])
-      end
-
-      it 'returns the brand in the name' do
-        OdeonUk::Html::Website.stub :new, website do
-          subject.must_equal 'Odeon Brighton'
+          subject.must_equal 'London - Leicester Square'
         end
       end
     end
   end
 
   describe '#locality' do
-    subject { cinema.locality }
+    subject { described_class.new(id).locality }
 
-    describe 'short address' do
-      let(:cinema) do
-        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
-      end
+    before { website.expect(:sitemap, sitemap_html) }
 
-      before do
-        website.expect(:cinema, cinema_html('brighton'), [71])
-      end
+    describe 'Short Address (Brighton)' do
+      let(:id) { 71 }
+
+      before { website.expect(:cinema, cinema_html('brighton'), [71]) }
 
       it 'returns town name' do
         OdeonUk::Html::Website.stub :new, website do
@@ -153,16 +90,12 @@ describe OdeonUk::Html::Cinema do
   end
 
   describe '#postal_code' do
-    subject { cinema.postal_code }
+    subject { described_class.new(id).postal_code }
 
     describe 'short address' do
-      let(:cinema) do
-        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
-      end
+      let(:id) { 71 }
 
-      before do
-        website.expect(:cinema, cinema_html('brighton'), [71])
-      end
+      before { website.expect(:cinema, cinema_html('brighton'), [71]) }
 
       it 'returns the postcode' do
         OdeonUk::Html::Website.stub :new, website do
@@ -172,13 +105,9 @@ describe OdeonUk::Html::Cinema do
     end
 
     describe 'short address (London)' do
-      let(:cinema) do
-        OdeonUk::Html::Cinema.new('211', 'BFI Imax', '/cinemas/bfi_imax/211/')
-      end
+      let(:id) { 211 }
 
-      before do
-        website.expect(:cinema, cinema_html('bfi_imax'), [211])
-      end
+      before { website.expect(:cinema, cinema_html('bfi_imax'), [211]) }
 
       it 'returns the postcode' do
         OdeonUk::Html::Website.stub :new, website do
@@ -188,15 +117,9 @@ describe OdeonUk::Html::Cinema do
     end
 
     describe 'short address (extra London Postcode)' do
-      let(:cinema) do
-        OdeonUk::Html::Cinema.new('105',
-                            'Leicester Square',
-                            '/cinemas/london_leicester_square/105/')
-      end
+      let(:id) { 105 }
 
-      before do
-        website.expect(:cinema, cinema_html('leicester_square'), [105])
-      end
+      before { website.expect(:cinema, cinema_html('leicester_square'), [105]) }
 
       it 'returns the postcode' do
         OdeonUk::Html::Website.stub :new, website do
@@ -206,31 +129,13 @@ describe OdeonUk::Html::Cinema do
     end
   end
 
-  describe '#screenings' do
-    subject { cinema.screenings }
-
-    let(:cinema) do
-      described_class.new(71, 'Brighton', '/cinemas/brighton/71/')
-    end
-
-    it 'calls out to Screening object' do
-      OdeonUk::Html::Screening.stub :at, [:screening] do
-        subject.must_equal([:screening])
-      end
-    end
-  end
-
   describe '#street_address' do
-    subject { cinema.street_address }
+    subject { described_class.new(id).street_address }
 
     describe 'short address' do
-      let(:cinema) do
-        OdeonUk::Html::Cinema.new('71', 'Brighton', '/cinemas/brighton/71/')
-      end
+      let(:id) { 71 }
 
-      before do
-        website.expect(:cinema, cinema_html('brighton'), [71])
-      end
+      before { website.expect(:cinema, cinema_html('brighton'), [71]) }
 
       it 'returns first line of address' do
         OdeonUk::Html::Website.stub :new, website do

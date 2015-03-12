@@ -13,6 +13,7 @@ module OdeonUk
         /\(live\)/i,                   # live in brackets
         'UKJFF -',                     # UK Jewish festival prefix
         /\bsing\-?a\-?long\b/i,        # singalong
+        'Autism Friendly - ',          # autism friendly
       ]
 
       # regexes and their replacements

@@ -1,3 +1,7 @@
+## UNRELEASED
+
+- complete internal re-architecture ready for use of API
+
 ## 2.0.4 - 2015-02-18
 
 - protect against unopened cinemas

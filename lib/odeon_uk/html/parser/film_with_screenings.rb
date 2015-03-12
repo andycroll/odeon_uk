@@ -63,10 +63,8 @@ module OdeonUk
         # @return [Array<Hash>]
         def to_a
           screening_hashes.map do |hash|
-            hash.merge(
-              dimension: dimension,
-              variant: add_imax(hash[:variant])
-            )
+            hash.merge(dimension: dimension,
+                       variant:   add_imax(hash[:variant]))
           end
         end
 
