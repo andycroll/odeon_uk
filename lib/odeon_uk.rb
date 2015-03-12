@@ -4,6 +4,7 @@ require 'tzinfo'
 require 'tzinfo/data'
 
 require_relative './odeon_uk/version'
+require_relative './odeon_uk/configuration'
 
 require_relative './odeon_uk/internal/title_sanitizer'
 
