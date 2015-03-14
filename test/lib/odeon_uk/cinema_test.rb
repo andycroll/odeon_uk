@@ -1,7 +1,7 @@
 require_relative '../../test_helper'
 
 describe OdeonUk::Cinema do
-  include FixturesHelper
+  include WebsiteFixturesHelper
 
   let(:described_class) { OdeonUk::Cinema }
 

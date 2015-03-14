@@ -1,7 +1,7 @@
 require_relative '../../../test_helper'
 
 describe OdeonUk::Html::Website do
-  include FixturesHelper
+  include WebsiteFixturesHelper
 
   let(:described_class) { OdeonUk::Html::Website }
 

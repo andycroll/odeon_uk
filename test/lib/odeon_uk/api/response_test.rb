@@ -1,81 +1,44 @@
-require 'pp'
 require_relative '../../../test_helper'
 
 describe OdeonUk::Api::Response do
+  include ApiFixturesHelper
+
   let(:described_class) { OdeonUk::Api::Response }
-
-  describe '#all_cinemas' do
-    subject { described_class.new.all_cinemas }
-
-    before { stub_post('all-cinemas', nil, all_cinemas_response) }
-
-    it 'returns a Hash' do
-      subject.class.must_equal Hash
-    end
-
-    it 'contains films key' do
-      subject.keys.must_include('sites')
-    end
-  end
 
   describe '#app_init' do
     subject { described_class.new.app_init }
 
-    before { stub_post('app-init', nil, app_init_response) }
+    before { stub_post('app-init', nil, app_init_plist) }
 
-    it 'returns a Hash' do
+    it 'returns a hash' do
       subject.class.must_equal Hash
-    end
-
-    it 'contains key named "films"' do
-      subject.keys.must_include('films')
+      subject.keys.must_equal(%w(films offers))
     end
   end
 
-  describe '#film_times(cinema_id, film_id)' do
-    subject { described_class.new.film_times(cinema_id: 6, film_id: 15_286) }
+  describe '#all_cinemas' do
+    subject { described_class.new.all_cinemas }
+
+    before { stub_post('all-cinemas', nil, all_cinemas_plist) }
+
+    it 'returns a hash' do
+      subject.class.must_equal Hash
+      subject.keys.must_equal(%w(sites))
+    end
+  end
+
+  describe '#showtimes(id)' do
+    subject { described_class.new.film_times(cinema_id: 71, film_id: 15130) }
 
     before do
-      request_body = { 's' => '6', 'm' => '15286' }
-      stub_post('film-times', request_body, film_times_response)
+      stub_post('film-times',
+                { s: '71', m: '15130' },
+                film_times_plist(cinema_id: 71, film_id: 15130))
     end
 
-    it 'returns a Array' do
+    it 'returns an array' do
       subject.class.must_equal Array
+      subject.each { |group| group.keys.must_equal(%w(date attributes)) }
     end
-
-    it 'contains times grouped by day' do
-      subject.each do |day|
-        day.keys.must_include('date')
-        day['attributes'].each do |kind|
-          kind.keys.must_include('attribute')
-          kind.keys.must_include('showtimes')
-        end
-      end
-    end
-  end
-
-  private
-
-  def all_cinemas_response
-    read_file('../../../../fixtures/api/all_cinemas.bplist')
-  end
-
-  def app_init_response
-    read_file('../../../../fixtures/api/app_init.bplist')
-  end
-
-  def film_times_response
-    read_file('../../../../fixtures/api/film_times.bplist')
-  end
-
-  def read_file(filepath)
-    File.read(File.expand_path(filepath, __FILE__))
-  end
-
-  def stub_post(site_path, request_body, response_body)
-    url      = "https://api.odeon.co.uk/2.1/api/#{site_path}"
-    response = { status: 200, body: response_body, headers: {} }
-    stub_request(:post, url).with(body: request_body).to_return(response)
   end
 end

@@ -1,4 +1,4 @@
-module FixturesHelper
+module WebsiteFixturesHelper
   private
 
   def cinema_html(id)
