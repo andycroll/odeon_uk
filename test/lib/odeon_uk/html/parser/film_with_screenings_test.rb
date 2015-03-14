@@ -1,24 +1,18 @@
 require_relative '../../../../test_helper'
 
 describe OdeonUk::Html::Parser::FilmWithScreenings do
+  include FixturesHelper
+
   let(:described_class) { OdeonUk::Html::Parser::FilmWithScreenings }
 
   describe '#film_name' do
     subject { described_class.new(film_html).film_name }
 
-    describe 'passed first film html' do
-      let(:film_html) { read_film_html('brighton/film_first') }
+    describe 'passed film html' do
+      let(:film_html) { showtimes_html('71-0') }
 
       it 'returns film name' do
-        subject.must_equal 'Big Hero 6'
-      end
-    end
-
-    describe 'passed last film html' do
-      let(:film_html) { read_film_html('brighton/film_last') }
-
-      it 'returns film name' do
-        subject.must_equal 'Unfinished Business'
+        subject.must_equal 'Home'
       end
     end
   end
@@ -26,8 +20,8 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
   describe '#to_a' do
     subject { described_class.new(film_html).to_a }
 
-    describe 'passed first film html' do
-      let(:film_html) { read_film_html('brighton/film_first') }
+    describe 'passed film html' do
+      let(:film_html) { showtimes_html('71-0') }
 
       it 'returns an array of hashes of screening attributes' do
         subject.must_be_instance_of Array
@@ -47,32 +41,13 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
         end
       end
 
-      it 'returns the correct number of screenings' do
-        subject.count.must_equal 4
-      end
-    end
-
-    describe 'passed last film html' do
-      let(:film_html) { read_film_html('brighton/film_last') }
-
-      it 'returns an array of hashes of screening attributes' do
-        subject.must_be_instance_of Array
-        subject.each do |hash|
-          hash[:booking_url].must_match 'https://www.odeon.co.uk/'
-          hash[:dimension].must_match(/[23]d/)
-          hash[:film_name].must_be_instance_of String
-          hash[:time].must_be_instance_of Time
-          hash[:time].zone.must_equal 'UTC'
-        end
-      end
-
       it 'returns at least 1' do
         subject.count.must_be :>=, 1
       end
     end
 
     describe 'passed imax film html' do
-      let(:film_html) { read_film_html('manchester/film_first_imax') }
+      let(:film_html) { showtimes_html('11-imax') }
 
       it 'returns an array of hashes of screening attributes' do
         subject.must_be_instance_of Array
@@ -96,7 +71,7 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
     end
 
     describe 'passed d-box film html' do
-      let(:film_html) { read_film_html('liverpool_one/film_first_dbox') }
+      let(:film_html) { showtimes_html('171-d-box') }
 
       it 'returns an array of hashes of screening attributes' do
         subject.must_be_instance_of Array
@@ -118,10 +93,5 @@ describe OdeonUk::Html::Parser::FilmWithScreenings do
         subject.count.must_be :>=, 1
       end
     end
-  end
-
-  def read_film_html(filename)
-    path = '../../../../../fixtures/html/showtimes'
-    File.read(File.expand_path("#{path}/#{filename}.html", __FILE__))
   end
 end

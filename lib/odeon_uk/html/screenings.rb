@@ -35,7 +35,7 @@ module OdeonUk
       end
 
       def self.showtimes_doc(id)
-        @showtimes_doc ||= Nokogiri::HTML(showtimes(id))
+        Nokogiri::HTML(showtimes(id))
       end
     end
   end

@@ -1,6 +1,8 @@
 require_relative '../../../test_helper'
 
 describe OdeonUk::Html::Screenings do
+  include FixturesHelper
+
   let(:described_class) { OdeonUk::Html::Screenings }
 
   let(:website) { Minitest::Mock.new }
@@ -11,7 +13,7 @@ describe OdeonUk::Html::Screenings do
     subject { described_class.at(71) }
 
     before do
-      website.expect(:showtimes, brighton_showtimes_html, [71])
+      website.expect(:showtimes, showtimes_html(71), [71])
     end
 
     it 'returns an array of screening attributes as hashes' do
@@ -34,22 +36,8 @@ describe OdeonUk::Html::Screenings do
 
     it 'returns correct number of screenings' do
       OdeonUk::Html::Website.stub :new, website do
-        subject.count.must_equal 133
+        subject.count.must_equal 212
       end
     end
-  end
-
-  private
-
-  def brighton_showtimes_html
-    read_file('../../../../fixtures/html/showtimes/brighton.html')
-  end
-
-  def read_file(filepath)
-    File.read(File.expand_path(filepath, __FILE__))
-  end
-
-  def sitemap_html
-    read_file('../../../../fixtures/html/sitemap.html')
   end
 end

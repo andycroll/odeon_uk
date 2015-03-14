@@ -1,6 +1,8 @@
 require_relative '../../test_helper'
 
 describe OdeonUk::Cinema do
+  include FixturesHelper
+
   let(:described_class) { OdeonUk::Cinema }
 
   let(:website) { Minitest::Mock.new }
@@ -61,7 +63,7 @@ describe OdeonUk::Cinema do
       subject { described_class.new(71).adr }
 
       describe '(brighton)' do
-        before { website.expect(:cinema, cinema_html('brighton'), [71]) }
+        before { website.expect(:cinema, cinema_html(71), [71]) }
 
         it 'returns the address hash' do
           OdeonUk::Html::Website.stub :new, website do
@@ -105,7 +107,7 @@ describe OdeonUk::Cinema do
     describe '#locality' do
       subject { described_class.new(71).locality }
 
-      before { website.expect(:cinema, cinema_html('brighton'), [71]) }
+      before { website.expect(:cinema, cinema_html(71), [71]) }
 
       it 'returns town name' do
         OdeonUk::Html::Website.stub :new, website do
@@ -146,7 +148,7 @@ describe OdeonUk::Cinema do
       describe 'short address' do
         let(:id) { 71 }
 
-        before { website.expect(:cinema, cinema_html('brighton'), [71]) }
+        before { website.expect(:cinema, cinema_html(71), [71]) }
 
         it 'returns the postcode' do
           OdeonUk::Html::Website.stub :new, website do
@@ -158,7 +160,7 @@ describe OdeonUk::Cinema do
       describe 'short address (London)' do
         let(:id) { 211 }
 
-        before { website.expect(:cinema, cinema_html('bfi_imax'), [211]) }
+        before { website.expect(:cinema, cinema_html(211), [211]) }
 
         it 'returns the postcode' do
           OdeonUk::Html::Website.stub :new, website do
@@ -170,7 +172,7 @@ describe OdeonUk::Cinema do
       describe 'short address (extra London Postcode)' do
         let(:id) { 105 }
 
-        before { website.expect(:cinema, cinema_html('leicester_square'), [105]) }
+        before { website.expect(:cinema, cinema_html(105), [105]) }
 
         it 'returns the postcode' do
           OdeonUk::Html::Website.stub :new, website do
@@ -210,7 +212,7 @@ describe OdeonUk::Cinema do
       describe 'short address' do
         let(:id) { 71 }
 
-        before { website.expect(:cinema, cinema_html('brighton'), [71]) }
+        before { website.expect(:cinema, cinema_html(71), [71]) }
 
         it 'returns first line of address' do
           OdeonUk::Html::Website.stub :new, website do
@@ -232,20 +234,6 @@ describe OdeonUk::Cinema do
           end
         end
       end
-    end
-
-    private
-
-    def read_file(filepath)
-      File.read(File.expand_path(filepath, __FILE__))
-    end
-
-    def sitemap_html
-      read_file('../../../fixtures/html/sitemap.html')
-    end
-
-    def cinema_html(filename)
-      read_file("../../../fixtures/html/cinema/#{filename}.html")
     end
   end
 end

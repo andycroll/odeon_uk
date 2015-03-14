@@ -5,6 +5,8 @@ module OdeonUk
     attr_reader :booking_url
     # @return [String] 2d or 3d
     attr_reader :dimension
+    # @return [String] the cinema id
+    attr_reader :cinema_id
     # @return [String] the cinema name
     attr_reader :cinema_name
     # @return [String] the film name
