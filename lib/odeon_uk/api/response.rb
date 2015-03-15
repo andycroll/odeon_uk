@@ -1,4 +1,5 @@
 require 'cfpropertylist'
+require 'net/http'
 
 module OdeonUk
   # Internal utility classes: Do not use
