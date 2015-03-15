@@ -1,6 +1,8 @@
-## UNRELEASED
+## 3.0.0 - 2015-03-15
 
 - complete internal re-architecture ready for use of API
+- include API source
+- remove Film model (not used)
 
 ## 2.0.4 - 2015-02-18
 
