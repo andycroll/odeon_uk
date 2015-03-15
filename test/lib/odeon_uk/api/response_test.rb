@@ -33,7 +33,7 @@ describe OdeonUk::Api::Response do
     before do
       stub_post('film-times',
                 { s: '71', m: '15130' },
-                film_times_plist(cinema_id: 71, film_id: 15130))
+                film_times_plist(71, 15130))
     end
 
     it 'returns an array' do

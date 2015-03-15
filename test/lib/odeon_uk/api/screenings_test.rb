@@ -16,7 +16,7 @@ describe OdeonUk::Api::Screenings do
         film_id = name.match(/(\d+)\.plist/)[1]
         stub_post('film-times',
                   { s: '71', m: film_id },
-                  film_times_plist(cinema_id: 71, film_id: film_id))
+                  film_times_plist(71, film_id))
       end
     end
 

@@ -9,7 +9,7 @@ module ApiFixturesHelper
     read_fixture('api/app_init')
   end
 
-  def film_times_plist(cinema_id:, film_id:)
+  def film_times_plist(cinema_id, film_id)
     read_fixture("api/film_times/#{cinema_id}-#{film_id}")
   end
 
