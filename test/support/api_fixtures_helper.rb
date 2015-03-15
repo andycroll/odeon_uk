@@ -13,6 +13,11 @@ module ApiFixturesHelper
     read_fixture("api/film_times/#{cinema_id}-#{film_id}")
   end
 
+  def film_times_plists(cinema_id)
+    listing = Dir.entries(File.expand_path('../../fixtures/api/film_times', __FILE__))
+    listing.reject { |filename| !filename.match(/\A#{cinema_id}-/) }
+  end
+
   def parse(content)
     CFPropertyList.native_types(CFPropertyList::List.new(data: content).value)
   end

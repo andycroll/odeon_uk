@@ -9,7 +9,7 @@ module OdeonUk
 
       # All currently listed films showing at a cinema
       # @param [Integer] cinema_id id of the cinema on the website
-      # @return [Array<OdeonUk::Screening>]
+      # @return [Array<Hash>]
       def self.at(cinema_id)
         film_nodes(cinema_id).flat_map do |node|
           screenings_parser(node).to_a
@@ -20,10 +20,6 @@ module OdeonUk
 
       def self.screenings_parser(html)
         Parser::FilmWithScreenings.new(html)
-      end
-
-      def self.cinema_hash(id)
-        { cinema_id: id, cinema_name: Html::Cinema.find(id).name }
       end
 
       def self.film_nodes(id)

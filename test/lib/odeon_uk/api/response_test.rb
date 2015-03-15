@@ -28,7 +28,7 @@ describe OdeonUk::Api::Response do
   end
 
   describe '#showtimes(id)' do
-    subject { described_class.new.film_times(cinema_id: 71, film_id: 15130) }
+    subject { described_class.new.film_times(71, 15130) }
 
     before do
       stub_post('film-times',

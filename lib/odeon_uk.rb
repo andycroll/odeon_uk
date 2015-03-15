@@ -10,6 +10,7 @@ require_relative './odeon_uk/internal/title_sanitizer'
 
 require_relative './odeon_uk/api/response'
 require_relative './odeon_uk/api/cinema'
+require_relative './odeon_uk/api/screenings'
 
 require_relative './odeon_uk/html/parser/film_with_screenings'
 require_relative './odeon_uk/html/website'

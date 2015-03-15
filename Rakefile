@@ -26,18 +26,28 @@ task :console do
 end
 
 desc 'recreate test fixtures'
-task :fixtures do
+namespace :fixtures do
   require 'odeon_uk'
   require_relative 'rake/fixture_creator'
 
-  FixtureCreator::Html.new(nil).sitemap!
-  FixtureCreator::Html.new(71).cinema!        # brighton
-  FixtureCreator::Html.new(211).cinema!       # bfi imax
-  FixtureCreator::Html.new(105).cinema!       # leceister square
-  FixtureCreator::Html.new(71).showtimes!
-  FixtureCreator::Html.new(71).film_node!(0)
-  FixtureCreator::Html.new(11).film_node!('imax')   # manchester imax
-  FixtureCreator::Html.new(171).film_node!('d-box') # liverpool dbox
+  desc 'html'
+  task :html do
+    FixtureCreator::Html.new(nil).sitemap!
+    FixtureCreator::Html.new(71).cinema!        # brighton
+    FixtureCreator::Html.new(211).cinema!       # bfi imax
+    FixtureCreator::Html.new(105).cinema!       # leceister square
+    FixtureCreator::Html.new(71).showtimes!
+    FixtureCreator::Html.new(71).film_node!(0)
+    FixtureCreator::Html.new(11).film_node!('imax')   # manchester imax
+    FixtureCreator::Html.new(171).film_node!('d-box') # liverpool dbox
+  end
+
+  desc 'api'
+  task :api do
+    FixtureCreator::Api.new.app_init!
+    FixtureCreator::Api.new.all_cinemas!
+    FixtureCreator::Api.new.film_times!(71)
+  end
 end
 
 task default: :test
