@@ -51,7 +51,7 @@ module OdeonUk
       private
 
       def self.cinemas_hash
-        @@cinemas_hash ||= Api::Response.new.all_cinemas['data']['sites']
+        @@cinemas_hash ||= Api::Response.new.all_cinemas['sites']
       end
 
       def cinema_hash

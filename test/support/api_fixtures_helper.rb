@@ -19,7 +19,8 @@ module ApiFixturesHelper
   end
 
   def parse(content)
-    CFPropertyList.native_types(CFPropertyList::List.new(data: content).value)
+    plist = CFPropertyList::List.new(data: content).value
+    CFPropertyList.native_types(plist).fetch('data', {})
   end
 
   def read_fixture(filepath)
