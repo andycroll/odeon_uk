@@ -1,3 +1,7 @@
+## 3.0.1 - 2015-04-09
+
+- fix cinema parsing over API
+
 ## 3.0.0 - 2015-03-15
 
 - complete internal re-architecture ready for use of API
