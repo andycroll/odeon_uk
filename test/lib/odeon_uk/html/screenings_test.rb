@@ -13,6 +13,7 @@ describe OdeonUk::Html::Screenings do
     subject { described_class.at(71) }
 
     before do
+      website.expect(:sitemap, sitemap_html)
       website.expect(:showtimes, showtimes_html(71), [71])
     end
 
