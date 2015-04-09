@@ -109,5 +109,13 @@ describe OdeonUk::Internal::TitleSanitizer do
         subject.must_equal('Frozen')
       end
     end
+
+    describe 'HTML ampersands' do
+      let(:title) { 'Fast &amp; Furious 7' }
+
+      it 'removes prefix' do
+        subject.must_equal('Fast & Furious 7')
+      end
+    end
   end
 end

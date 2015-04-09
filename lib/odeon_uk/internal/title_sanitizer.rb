@@ -14,6 +14,7 @@ module OdeonUk
         'UKJFF -',                     # UK Jewish festival prefix
         /\bsing\-?a\-?long\b/i,        # singalong
         'Autism Friendly - ',          # autism friendly
+        'amp;',                        # html ampersands
       ]
 
       # regexes and their replacements

@@ -1,3 +1,7 @@
+## 3.0.2 - 2015-04-09
+
+- fix HTML ampersands in film titles
+
 ## 3.0.1 - 2015-04-09
 
 - fix cinema parsing over API
