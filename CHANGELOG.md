@@ -1,3 +1,8 @@
+## 3.0.3 - 2015-04-09
+
+### Added
+- Variants if using the API
+
 ## 3.0.2 - 2015-04-09
 
 - fix HTML ampersands in film titles
