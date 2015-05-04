@@ -30,9 +30,24 @@ describe OdeonUk::Api::Screenings do
         screening[:time].must_be_instance_of(Time)
 
         screening.keys.must_include(:variant)
+        screening[:variant].must_be_instance_of(Array)
 
         screening.keys.must_include(:dimension)
         screening[:dimension].must_match(/[23]d/)
+      end
+    end
+
+    it 'returns at least some non-empty variants' do
+      variants = subject.map { |screening| screening[:variant] }
+      variants.select { |v| !v.empty? }.count.must_be :>, 0
+    end
+
+    it 'returns valid variant types' do
+      variants = subject.map { |screening| screening[:variant] }
+      variants.each do |v|
+        if v.length > 0
+          v.each { |e| %w(arts kids imax baby senior).must_include(e) }
+        end
       end
     end
 

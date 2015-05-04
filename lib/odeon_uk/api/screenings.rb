@@ -23,7 +23,7 @@ module OdeonUk
                   dimension: screening['attribute'].include?('3D') ? '3d' : '2d',
                   film_name: films_map(cinema_id)[film_id],
                   time:      TimeParser.new(date, p[0]['performanceTime']).to_utc,
-                  variant:   '',
+                  variant:   VariantParser.new(screening['attribute']).to_a
                 }
               end
             end
@@ -83,6 +83,20 @@ module OdeonUk
 
       def tz
         @tz ||= TZInfo::Timezone.get('Europe/London')
+      end
+    end
+
+    VariantParser = Struct.new(:text) do
+      TRANSLATOR = {
+        'Culture'       => 'arts',
+        'Kids'          => 'kids',
+        'IMAX'          => 'imax',
+        'Newbies'       => 'baby',
+        'Silver Cinema' => 'senior'
+      }
+
+      def to_a
+        TRANSLATOR.select { |k, _| text.include?(k) }.values.uniq
       end
     end
   end
