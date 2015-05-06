@@ -34,6 +34,7 @@ module OdeonUk
       # The url of the cinema
       # @return [Nil]
       def url
+        "http://www.odeon.co.uk/cinemas/#{urlized_name}/#{@id}/"
       end
 
       # Post code of the cinema
@@ -56,6 +57,10 @@ module OdeonUk
 
       def cinema_hash
         @cinema_hash ||= self.class.cinemas_hash[id.to_s]
+      end
+
+      def urlized_name
+        name.downcase.gsub(/[^a-z0-9]/, '_')
       end
     end
   end

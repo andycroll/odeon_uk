@@ -295,7 +295,7 @@ describe OdeonUk::Cinema do
             subject.brand.must_equal 'Odeon'
             subject.name.must_equal 'Brighton'
             subject.slug.must_equal 'odeon-brighton'
-            subject.url.must_be_nil
+            subject.url.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
           end
         end
       end
@@ -472,7 +472,7 @@ describe OdeonUk::Cinema do
 
         it 'returns the brand in the name' do
           OdeonUk::Api::Response.stub :new, response do
-            subject.must_be_nil
+            subject.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
           end
         end
       end

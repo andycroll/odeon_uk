@@ -72,7 +72,7 @@ describe OdeonUk::Api::Cinema do
       end
     end
   end
-  
+
   describe '#locality' do
     subject { described_class.new(id).locality }
 
@@ -142,6 +142,22 @@ describe OdeonUk::Api::Cinema do
       it 'returns first line of address' do
         OdeonUk::Api::Response.stub :new, response do
           subject.must_equal 'Kingswest'
+        end
+      end
+    end
+  end
+
+  describe '#url' do
+    subject { described_class.new(id).url }
+
+    describe 'short address' do
+      let(:id) { 71 }
+
+      before { response.expect(:all_cinemas, parse(all_cinemas_plist)) }
+
+      it 'returns first line of address' do
+        OdeonUk::Api::Response.stub :new, response do
+          subject.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
         end
       end
     end
