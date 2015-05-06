@@ -1,3 +1,8 @@
+## 3.0.4 - 2015-05-06
+
+### Added
+- URLs created for api cinemas
+
 ## 3.0.3 - 2015-04-09
 
 ### Added
