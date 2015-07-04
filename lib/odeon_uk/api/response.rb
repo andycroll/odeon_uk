@@ -7,6 +7,7 @@ module OdeonUk
   module Api
     # Utility class to make calls to the odeon website
     class Response
+      # iOS app API version
       VERSION = '2.1'
 
       # cinemas information
