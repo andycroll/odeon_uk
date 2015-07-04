@@ -34,7 +34,9 @@ module OdeonUk
     # @param [Integer] cinema_id id of the cinema on the website
     # @return [Array<OdeonUk::Screening>]
     def self.at(cinema_id)
-      parser.at(cinema_id).map { |hash| new(hash.merge(cinema_hash)) }
+      parser_class.at(cinema_id).map do |hash|
+        new(hash.merge(cinema_hash(cinema_id)))
+      end
     end
 
     # The date of the screening
@@ -58,12 +60,12 @@ module OdeonUk
 
     private
 
-    def self.cinema_hash
+    def self.cinema_hash(cinema_id)
       { cinema_id: cinema_id, cinema_name: Cinema.new(cinema_id).name }
     end
 
-    def self.parser
-      Html::Screenings
+    def self.parser_class
+      OdeonUk.configuration.method == :api ? Api::Screenings : Html::Screenings
     end
   end
 end
