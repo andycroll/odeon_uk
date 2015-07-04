@@ -1,5 +1,10 @@
 ## 3.0.4 - 2015-05-06
 
+### Fixed
+- API use for screenings
+
+## 3.0.4 - 2015-05-06
+
 ### Added
 - URLs created for api cinemas
 
