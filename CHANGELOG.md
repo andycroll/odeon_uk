@@ -1,3 +1,8 @@
+## MASTER
+
+### Fixed
+- Protect HTTP use against 500
+
 ## 3.0.4 - 2015-05-06
 
 ### Fixed

@@ -17,6 +17,11 @@ module WebsiteFixturesHelper
     File.read(File.expand_path("../../fixtures/#{filepath}.html", __FILE__))
   end
 
+  def stub_get_with_500(site_path)
+    url      = "http://www.odeon.co.uk/#{site_path}"
+    stub_request(:get, url).to_return(status: [500, 'Internal Server Error'])
+  end
+
   def stub_get(site_path, response_body)
     url      = "http://www.odeon.co.uk/#{site_path}"
     response = { status: 200, body: response_body, headers: {} }

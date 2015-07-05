@@ -30,6 +30,8 @@ module OdeonUk
 
       def get(path)
         URI("http://www.odeon.co.uk/#{path}").read
+      rescue OpenURI::HTTPError
+        ''
       end
     end
   end
