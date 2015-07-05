@@ -1,9 +1,9 @@
-## MASTER
+## 3.0.6 - 2015-07-05
 
 ### Fixed
 - Protect HTTP use against 500
 
-## 3.0.4 - 2015-05-06
+## 3.0.5 - 2015-07-04
 
 ### Fixed
 - API use for screenings
