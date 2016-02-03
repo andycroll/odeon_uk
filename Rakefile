@@ -8,8 +8,6 @@ Rake::TestTask.new do |t|
   t.test_files = FileList[
     'test/lib/odeon_uk/*_test.rb',
     'test/lib/odeon_uk/api/*_test.rb',
-    'test/lib/odeon_uk/html/*_test.rb',
-    'test/lib/odeon_uk/html/parser/*_test.rb',
     'test/lib/odeon_uk/internal/*_test.rb'
   ]
   t.verbose = true
@@ -26,28 +24,15 @@ task :console do
 end
 
 desc 'recreate test fixtures'
-namespace :fixtures do
+task :fixtures do
   require 'odeon_uk'
   require_relative 'rake/fixture_creator'
+  require 'fileutils'
 
-  desc 'html'
-  task :html do
-    FixtureCreator::Html.new(nil).sitemap!
-    FixtureCreator::Html.new(71).cinema!        # brighton
-    FixtureCreator::Html.new(211).cinema!       # bfi imax
-    FixtureCreator::Html.new(105).cinema!       # leceister square
-    FixtureCreator::Html.new(71).showtimes!
-    FixtureCreator::Html.new(71).film_node!(0)
-    FixtureCreator::Html.new(11).film_node!('imax')   # manchester imax
-    FixtureCreator::Html.new(171).film_node!('d-box') # liverpool dbox
-  end
-
-  desc 'api'
-  task :api do
-    FixtureCreator::Api.new.app_init!
-    FixtureCreator::Api.new.all_cinemas!
-    FixtureCreator::Api.new.film_times!(71)
-  end
+  FixtureCreator::Api.new.app_init!
+  FixtureCreator::Api.new.all_cinemas!
+  FileUtils.rm FileList['test/fixtures/api/film_times/*.plist']
+  FixtureCreator::Api.new.film_times!(71)
 end
 
 task default: :test

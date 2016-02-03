@@ -104,12 +104,8 @@ module OdeonUk
 
     private
 
-    def self.cinema_parser_class
-      OdeonUk.configuration.method == :api ? Api::Cinema : Html::Cinema
-    end
-
     def cinema_parser
-      @cinema_parser ||= self.class.cinema_parser_class.new(id)
+      @cinema_parser ||= Api::Cinema.new(id)
     end
   end
 end
