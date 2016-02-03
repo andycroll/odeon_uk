@@ -52,7 +52,7 @@ describe OdeonUk::Api::Screenings do
     end
 
     it 'returns correct number of screenings' do
-      subject.count.must_equal 159
+      subject.count.must_be :>, 150
     end
   end
 end

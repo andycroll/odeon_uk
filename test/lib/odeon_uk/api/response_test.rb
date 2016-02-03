@@ -33,7 +33,7 @@ describe OdeonUk::Api::Response do
     before do
       stub_post('film-times',
                 { s: '71', m: '15130' },
-                film_times_plist(71, 15130))
+                film_times_plist_random)
     end
 
     it 'returns an array' do

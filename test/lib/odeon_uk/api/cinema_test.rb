@@ -29,7 +29,7 @@ describe OdeonUk::Api::Cinema do
 
     it 'returns the correctly sized array' do
       OdeonUk::Api::Response.stub :new, response do
-        subject.size.must_equal 115
+        subject.size.must_be :>, 100
       end
     end
   end
@@ -67,7 +67,7 @@ describe OdeonUk::Api::Cinema do
 
       it 'returns cinema name' do
         OdeonUk::Api::Response.stub :new, response do
-          subject.must_equal 'London - Leicester Square'
+          subject.must_equal 'London Leicester Square'
         end
       end
     end
@@ -125,7 +125,7 @@ describe OdeonUk::Api::Cinema do
 
       it 'returns the postcode' do
         OdeonUk::Api::Response.stub :new, response do
-          subject.must_equal 'WC2H 7LQ'
+          subject.must_equal 'WC2H 7JY'
         end
       end
     end
