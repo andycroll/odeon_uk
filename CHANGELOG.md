@@ -9,6 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Use the `cinebase` gem to fix an common API across all gems
+- Screening becomes Performance in cinebase 3.0.0
+
 ## 3.0.6 - 2015-07-05
 
 ### Fixed

@@ -9,7 +9,7 @@ module FixtureCreator
     end
 
     def film_times!(cinema_id)
-      OdeonUk::Api::Screenings.send(:film_ids, cinema_id).each do |i|
+      OdeonUk::Performance.send(:film_ids_at, cinema_id).each do |i|
         write_film_times_fixture(cinema_id, i)
       end
     end
