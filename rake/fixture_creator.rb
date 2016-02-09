@@ -29,9 +29,9 @@ module FixtureCreator
       text = "film_times/#{cinema_id}-#{film_id}"
       File.open(fixture(text), 'w+') do |file|
         log(text)
-        file.write OdeonUk::Api::Response.new.send(:film_times_raw,
-                                                   cinema_id,
-                                                   film_id)
+        file.write OdeonUk::Internal::ApiResponse.new.send(:film_times_raw,
+                                                           cinema_id,
+                                                           film_id)
       end
     end
 
@@ -39,7 +39,7 @@ module FixtureCreator
       FileUtils.mkdir_p kind.to_s
       File.open(fixture(kind), 'w+') do |file|
         log(kind)
-        file.write OdeonUk::Api::Response.new.send("#{kind}_raw".to_sym)
+        file.write OdeonUk::Internal::ApiResponse.new.send("#{kind}_raw".to_sym)
       end
     end
   end

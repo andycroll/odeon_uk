@@ -1,9 +1,9 @@
 require_relative '../../../test_helper'
 
-describe OdeonUk::Api::Response do
+describe OdeonUk::Internal::ApiResponse do
   include ApiFixturesHelper
 
-  let(:described_class) { OdeonUk::Api::Response }
+  let(:described_class) { OdeonUk::Internal::ApiResponse }
 
   describe '#app_init' do
     subject { described_class.new.app_init }

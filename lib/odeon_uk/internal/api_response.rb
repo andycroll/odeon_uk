@@ -4,11 +4,11 @@ require 'net/http'
 module OdeonUk
   # Internal utility classes: Do not use
   # @api private
-  module Api
+  module Internal
     # Utility class to make calls to the odeon website
-    class Response
+    class ApiResponse
       # iOS app API version
-      VERSION = '2.1'
+      VERSION = '2.1'.freeze
 
       # cinemas information
       # @return [Hash] decoded response of api containing cinema details
