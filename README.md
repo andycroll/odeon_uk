@@ -24,48 +24,74 @@ Or install it yourself as:
 
 ## Usage
 
+The gem conforms to the API set down in the `cinebase` gem, [andycroll/cinebase](https://github.com/andycroll/cinebase), which provides a lot of useful base vocabulary and repetitive code for this series of cinema focussed gems.
+
+Performance titles are sanitized as much as possible, removing 'screening type' information and 'dimension' as well as standardising all the theatre/cultural event naming (NT Live, Royal Opera House etc).
+
 ### Cinema
 
 ``` ruby
 OdeonUk::Cinema.all
-#=> [<OdeonUk::Cinema brand="Odeon" name="Odeon Tunbridge Wells" slug="odeon-tunbridge-wells" chain_id="23" url="...">, #=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">, ...]
+#=> [<OdeonUk::Cinema ...>, <OdeonUk::Cinema ...>, ...]
 
-OdeonUk::Cinema.find_by_id('71')
-#=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" address="..." chain_id="71" url="...">
+cinema = OdeonUk::Cinema.new(71)
+#=> <OdeonUk::Cinema ...>
 
-OdeonUk::Cinema.find_by_id(71)
-#=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" address="..." chain_id="71" url="...">
-
-cinema = OdeonUk::Cinema.find_by_slug('odeon-brighton')
-#=> <OdeonUk::Cinema brand="Odeon" name="Odeon Brighton" slug="odeon-brighton" chain_id="71" url="...">
+cinema.adr
+#=> {
+  street_address:   'Kingswest',
+  extended_address: nil,
+  locality:         'Brighton',
+  region:           nil,
+  postal_code:      'BN1 2RE',
+  country:          'United Kingdom'
+}
 
 cinema.brand
 #=> 'Odeon'
 
-cinema.chain_id
-#=> '71'
+cinema.full_name
+#=> 'Odeon Brighton'
 
-cinema.url
-#=> "http://www.odeon.co.uk/cinemas/brighton/71/"
+cinema.id
+#=> 71
 
-cinema.films
-#=> [<OdeonUk::Film name="Iron Man 3">, <OdeonUk::Film name="Star Trek: Into Darkness">]
-
-cinema.screenings
-#=> [<OdeonUk::Screening film="About Time" when="2013-09-09 11:00 UTC" variant="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" variant="kids">, <OdeonUk::Screening ..>, <OdeonUk::Screening ...>]
-
-cinema.screenings_of 'Iron Man 3'
-#=> [<OdeonUk::Screening film="Iron Man 3" when="2013-09-09 11:00 UTC" variant="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" variant="kids">]
-
-cinema.screenings_of <OdeonUk::Film name="Iron Man 3">
-#=> [<OdeonUk::Screening film="Iron Man 3" when="2013-09-09 11:00 UTC" variant="3d">, <OdeonUk::Screening film="Iron Man 3" when="2013-09-09 13:50 UTC" variant="kids">]
+cinema.postal_code
+#=> 'BN1 2RE'
 ```
 
-### Film
+### Performances
 
 ``` ruby
-OdeonUk::Film.all
-#=> [<OdeonUk::Film name="Iron Man 3" slug="iron-man-3">, <OdeonUk::Film name="Star Trek Into Darkness" slug="star-trek-into-darkness">, <OdeonUk::Film name="Captain America: The First Avenger" slug="captain-america-the-first-avenger">, <OdeonUk::Film name="Thor: The Dark World" slug="thor-the-dark-world">]
+OdeonUk::Performance.at(17)
+#=> [<OdeonUk::Performance ...>, <OdeonUk::Performance ...>, ...]
+
+performance = OdeonUk::Performance.at(17).first
+#=> <OdeonUk::Performance ...>
+
+performance.film_name
+#=> 'Star Wars: The Force Awakens'
+
+performance.dimension
+#=> '2d'
+
+performance.variant
+#=> ['imax', 'kids']
+
+performance.starting_at
+#=> 2016-02-04 13:00:00 UTC
+
+performance.showing_on
+#=> #<Date: 2016-02-04 ((2457423j,0s,0n),+0s,2299161j)>
+
+performance.booking_url # for now
+#=> nil
+
+performance.cinema_name
+#=> 'Brighton'
+
+performance.cinema_id
+#=> 71
 ```
 
 ## Contributing
