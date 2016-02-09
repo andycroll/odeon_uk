@@ -1,5 +1,4 @@
 require 'cinebase'
-require 'nokogiri'
 
 require_relative './odeon_uk/version'
 
