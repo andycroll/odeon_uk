@@ -31,6 +31,7 @@ task :fixtures do
 
   FixtureCreator::Api.new.app_init!
   FixtureCreator::Api.new.all_cinemas!
+  puts 'Clean folder'
   FileUtils.rm FileList['test/fixtures/api/film_times/*.plist']
   FixtureCreator::Api.new.film_times!(71)
 end
