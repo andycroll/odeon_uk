@@ -1,7 +1,5 @@
-require 'forwardable'
+require 'cinebase'
 require 'nokogiri'
-require 'tzinfo'
-require 'tzinfo/data'
 
 require_relative './odeon_uk/version'
 

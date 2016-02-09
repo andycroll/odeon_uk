@@ -23,7 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'webmock'
 
   gem.add_runtime_dependency 'CFPropertyList'
-  gem.add_runtime_dependency 'nokogiri'
-  gem.add_runtime_dependency 'tzinfo'
-  gem.add_runtime_dependency 'tzinfo-data'
+  gem.add_runtime_dependency 'cinebase', '~> 3.0'
 end
