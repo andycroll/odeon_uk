@@ -4,6 +4,7 @@ module OdeonUk
     # @!attribute [r] id
     #   @return [Integer] the numeric id of the cinema on the Cineworld website
 
+    # Constructor
     # @param [Integer, String] id the cinema id of the format 71/'71' as used on
     # @return [OdeonUk::Cinema]
     def initialize(id)
