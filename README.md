@@ -2,10 +2,11 @@
 
 A simple gem to parse the [Odeon UK website](http://odeon.co.uk) and spit out useful formatted info.
 
-[![Gem Version](https://badge.fury.io/rb/odeon_uk.png)](http://badge.fury.io/rb/odeon_uk)
-[![Code Climate](https://codeclimate.com/github/andycroll/odeon_uk.png)](https://codeclimate.com/github/andycroll/odeon_uk)
-[![Build Status](https://travis-ci.org/andycroll/odeon_uk.png?branch=master)](https://travis-ci.org/andycroll/odeon_uk)
-[![Inline docs](http://inch-ci.org/github/andycroll/odeon_uk.png)](http://inch-ci.org/github/andycroll/odeon_uk)
+[![Gem Version](https://badge.fury.io/rb/odeon_uk.svg)](https://badge.fury.io/rb/odeon_uk)
+[![Code Climate](https://codeclimate.com/github/andycroll/odeon_uk/badges/gpa.svg)](https://codeclimate.com/github/andycroll/odeon_uk)
+[![Test Coverage](https://codeclimate.com/github/andycroll/odeon_uk/badges/coverage.svg)](https://codeclimate.com/github/andycroll/odeon_uk/coverage)
+[![Build Status](https://travis-ci.org/andycroll/odeon_uk.svg?branch=master)](https://travis-ci.org/andycroll/odeon_uk)
+[![Inline docs](http://inch-ci.org/github/andycroll/odeon_uk.svg?branch=master)](http://inch-ci.org/github/andycroll/odeon_uk)
 
 ## Installation
 
