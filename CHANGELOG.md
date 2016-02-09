@@ -2,14 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## 4.0.0 - 2016-02-09
 
 ### Removed
 - HTML parsing
 
 ### Added
 - Use the `cinebase` gem to fix an common API across all gems
-- Screening becomes Performance in cinebase 3.0.0
+- Screening becomes Performance in cinebase 3.0.
+- license to AGPL for free usage, MIT for commercial
 
 ## 3.0.6 - 2015-07-05
 
