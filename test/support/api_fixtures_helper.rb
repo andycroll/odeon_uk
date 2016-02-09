@@ -1,3 +1,4 @@
+# Read fixtures from disk
 module ApiFixturesHelper
   private
 
@@ -14,12 +15,13 @@ module ApiFixturesHelper
   end
 
   def film_times_plist_random
-    read_fixture("api/film_times/#{film_times_plists(71).sample.gsub('.plist', '')}")
+    read_fixture("api/film_times/#{film_times_plist_names(71).sample}")
   end
 
-  def film_times_plists(cinema_id)
-    listing = Dir.entries(File.expand_path('../../fixtures/api/film_times', __FILE__))
-    listing.reject { |filename| !filename.match(/\A#{cinema_id}-/) }
+  def film_times_plist_names(cinema_id)
+    Dir.entries(File.expand_path('../../fixtures/api/film_times', __FILE__))
+       .reject { |filename| !filename.match(/\A#{cinema_id}-/) }
+       .map { |filename| filename.gsub('.plist', '') }
   end
 
   def parse(content)

@@ -3,26 +3,26 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'odeon_uk/version'
 
-Gem::Specification.new do |gem|
-  gem.name          = "odeon_uk"
-  gem.version       = OdeonUk::VERSION
-  gem.authors       = ["Andy Croll"]
-  gem.email         = ["andy@goodscary.com"]
-  gem.description   = %q{An API to pull movie information from the ODEON.co.uk website}
-  gem.summary       = %q{It's a scraper, but a nice one}
-  gem.homepage      = "http://github.com/andycroll/odeon_uk"
-  gem.license       = "MIT"
+Gem::Specification.new do |spec|
+  spec.name          = 'odeon_uk'
+  spec.version       = OdeonUk::VERSION
+  spec.authors       = ['Andy Croll']
+  spec.email         = ['andy@goodscary.com']
+  spec.description   = 'Pull movie & cinema information from the Odeon iOS API'
+  spec.summary       = "It's a scraper, but a nice one"
+  spec.homepage      = 'http://github.com/andycroll/odeon_uk'
+  spec.licenses      = %w(AGPL MIT)
 
-  gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  spec.files         = `git ls-files`.split($RS)
+  spec.executables   = spec.files.grep(%r{^bin/}).map { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ['lib']
 
-  gem.add_development_dependency 'codeclimate-test-reporter'
-  gem.add_development_dependency 'minitest-reporters'
-  gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'webmock'
+  spec.add_development_dependency 'codeclimate-test-reporter'
+  spec.add_development_dependency 'minitest-reporters'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'webmock'
 
-  gem.add_runtime_dependency 'CFPropertyList'
-  gem.add_runtime_dependency 'cinebase', '~> 3.0'
+  spec.add_runtime_dependency 'CFPropertyList'
+  spec.add_runtime_dependency 'cinebase', '~> 3.0'
 end

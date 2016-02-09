@@ -5,6 +5,9 @@ describe OdeonUk::Internal::ApiResponse do
 
   let(:described_class) { OdeonUk::Internal::ApiResponse }
 
+  before { WebMock.disable_net_connect! }
+  after { WebMock.allow_net_connect! }
+
   describe '#app_init' do
     subject { described_class.new.app_init }
 
@@ -28,7 +31,7 @@ describe OdeonUk::Internal::ApiResponse do
   end
 
   describe '#showtimes(id)' do
-    subject { described_class.new.film_times(71, 15130) }
+    subject { described_class.new.film_times(71, 15_130) }
 
     before do
       stub_post('film-times',
