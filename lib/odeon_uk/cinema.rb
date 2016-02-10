@@ -55,7 +55,7 @@ module OdeonUk
     # @example
     #   cinema = OdeonUk::Cinema.new(3)
     #   cinema.brand
-    #   #=> 'Cineworld'
+    #   #=> 'Odeon'
     def brand
       'Odeon'.freeze
     end
