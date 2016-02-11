@@ -25,6 +25,7 @@ module OdeonUk
     # @param [Integer] cinema_id id of the cinema on the website
     # @return [Array<OdeonUk::Performance>]
     def self.at(cinema_id)
+      cinema_id = cinema_id.to_i
       film_ids_at(cinema_id).flat_map do |film_id|
         api_response.film_times(cinema_id, film_id).flat_map do |day|
           performance_days(day).map do |hash|

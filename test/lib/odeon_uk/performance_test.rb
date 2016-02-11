@@ -8,20 +8,43 @@ describe OdeonUk::Performance do
   after { WebMock.allow_net_connect! }
 
   describe '.at(cinema_id)' do
-    subject { described_class.at(71) }
+    subject { described_class.at(cinema_id) }
 
-    it 'returns an array of performances' do
-      OdeonUk::Internal::ApiResponse.stub :new, api_response do
-        subject.must_be_instance_of(Array)
-        subject.each do |element|
-          element.must_be_instance_of(described_class)
+    describe 'passed Fixnum' do
+      let(:cinema_id) { 71 }
+
+      it 'returns an array of performances' do
+        OdeonUk::Internal::ApiResponse.stub :new, api_response do
+          subject.must_be_instance_of(Array)
+          subject.each do |element|
+            element.must_be_instance_of(described_class)
+          end
+        end
+      end
+
+      it 'returns at least a sensible number' do
+        OdeonUk::Internal::ApiResponse.stub :new, api_response do
+          subject.count.must_be :>, 110
         end
       end
     end
 
-    it 'returns at least a sensible number' do
-      OdeonUk::Internal::ApiResponse.stub :new, api_response do
-        subject.count.must_be :>, 110
+    describe 'passed String' do
+      let(:cinema_id) { '71' }
+
+      it 'returns an array of performances' do
+        OdeonUk::Internal::ApiResponse.stub :new, api_response do
+          subject.must_be_instance_of(Array)
+          subject.each do |element|
+            element.must_be_instance_of(described_class)
+          end
+        end
+      end
+
+      it 'returns at least a sensible number' do
+        OdeonUk::Internal::ApiResponse.stub :new, api_response do
+          subject.count.must_be :>, 110
+        end
       end
     end
   end
