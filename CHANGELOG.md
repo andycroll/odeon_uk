@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## 4.0.1 - 2016-02-11
 
 ### Fixed
 - pass an `to_int`able `String` to methods and live success
