@@ -2,6 +2,7 @@
 
 A simple gem to parse the [Odeon UK website](http://odeon.co.uk) and spit out useful formatted info.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/24812bafd82f452b82e9791d468247d7)](https://www.codacy.com/app/andycroll/odeon_uk?utm_source=github.com&utm_medium=referral&utm_content=andycroll/odeon_uk&utm_campaign=badger)
 [![Gem Version](https://badge.fury.io/rb/odeon_uk.svg)](https://badge.fury.io/rb/odeon_uk)
 [![Code Climate](https://codeclimate.com/github/andycroll/odeon_uk/badges/gpa.svg)](https://codeclimate.com/github/andycroll/odeon_uk)
 [![Test Coverage](https://codeclimate.com/github/andycroll/odeon_uk/badges/coverage.svg)](https://codeclimate.com/github/andycroll/odeon_uk/coverage)
