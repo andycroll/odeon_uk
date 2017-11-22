@@ -1,7 +1,16 @@
+after_script:
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter before-build; fi
+env:
+  global:
+    - CC_TEST_REPORTER_ID=2999a45e7504799e1153d82fcb36fcc8f603388ca3d7df3caae1dd20f753a8c1
 language: ruby
 rvm:
-  - 2.2.4
-  - 2.3.0
-addons:
-  code_climate:
-    repo_token: 2999a45e7504799e1153d82fcb36fcc8f603388ca3d7df3caae1dd20f753a8c1
+  - 2.2.8
+  - 2.3.5
+  - 2.4.2
+script:
+  - bundle exec rake
