@@ -27,9 +27,15 @@ module OdeonUk
 
       private
 
+      # One client keeps one connection open, so reuse it until the token changes.
       def client
-        Cinebase::Vista::Client.new(base_url: BASE_URL, region_code: REGION_CODE,
-                                    token: OdeonUk.token)
+        token = OdeonUk.token
+        if @client.nil? || @client_token != token
+          @client_token = token
+          @client = Cinebase::Vista::Client.new(base_url: BASE_URL, region_code: REGION_CODE,
+                                                token: token)
+        end
+        @client
       end
     end
   end

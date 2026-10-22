@@ -58,7 +58,35 @@ class OdeonUk::Internal::ApiResponseTest < Minitest::Test
     assert_equal 'Vista HTTP error 500', error.message
   end
 
+  def test_reuses_one_client_while_the_token_holds
+    stub_request(:get, "#{BASE_URL}/sites").to_return(status: 200, body: sites_json)
+    shared = api
+
+    assert_equal 1, count_clients { 3.times { shared.sites } }
+  end
+
+  def test_builds_a_new_client_for_a_new_token
+    stub_request(:get, "#{BASE_URL}/sites").to_return(status: 200, body: sites_json)
+    shared = api
+
+    clients = count_clients do
+      shared.sites
+      OdeonUk.token = 'renewed-jwt'
+      shared.sites
+    end
+
+    assert_equal 2, clients
+  end
+
   private
+
+  def count_clients
+    clients = 0
+    original = Cinebase::Vista::Client.method(:new)
+    counting = ->(**options) { clients += 1; original.call(**options) }
+    Cinebase::Vista::Client.stub(:new, counting) { yield }
+    clients
+  end
 
   def api
     OdeonUk::Internal::ApiResponse.new
