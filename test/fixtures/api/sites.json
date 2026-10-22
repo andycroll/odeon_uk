@@ -1,0 +1,32 @@
+{
+  "sites": [
+    {
+      "id": "017",
+      "name": { "text": "Birmingham New Street" },
+      "contactDetails": {
+        "address": { "line1": "1 Example Arcade", "line2": "New Street", "city": "Birmingham" }
+      }
+    },
+    {
+      "id": "153",
+      "name": { "text": "London Leicester Square" },
+      "contactDetails": {
+        "address": { "line1": "2 Example Square", "line2": "", "city": "London" }
+      }
+    },
+    {
+      "id": "824",
+      "name": { "text": "Brighton" },
+      "contactDetails": {
+        "address": { "line1": "3 Example Parade", "line2": "Seafront", "city": "Brighton" }
+      }
+    },
+    {
+      "id": "955",
+      "name": { "text": "Trafford Centre" },
+      "contactDetails": {
+        "address": { "line1": "4 Example Dome", "line2": "", "city": "Manchester" }
+      }
+    }
+  ]
+}

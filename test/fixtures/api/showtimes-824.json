@@ -1,0 +1,66 @@
+{
+  "businessDate": "2026-10-24",
+  "showtimes": [
+    {
+      "id": "824-1001",
+      "filmId": "FILM-1",
+      "schedule": { "startsAt": "2026-10-24T09:00:00+01:00" },
+      "attributeIds": ["A-AD"],
+      "requires3dGlasses": false
+    },
+    {
+      "id": "824-1002",
+      "filmId": "FILM-1",
+      "schedule": { "startsAt": "2026-10-24T14:30:00+01:00" },
+      "attributeIds": ["A-3D", "A-IMAX"],
+      "requires3dGlasses": true
+    },
+    {
+      "id": "824-1003",
+      "filmId": "FILM-2",
+      "schedule": { "startsAt": "2026-10-24T18:00:00+01:00" },
+      "attributeIds": ["A-KOREAN", "A-SUB", "A-EVENT"],
+      "requires3dGlasses": false
+    },
+    {
+      "id": "824-1004",
+      "filmId": "FILM-3",
+      "schedule": { "startsAt": "2026-10-24T20:15:00+01:00" },
+      "attributeIds": ["A-TAMIL", "A-SUB"],
+      "requires3dGlasses": false
+    },
+    {
+      "id": "824-1005",
+      "filmId": "FILM-4",
+      "schedule": { "startsAt": "2026-10-24T10:00:00+01:00" },
+      "attributeIds": ["A-KIDS", "A-CAPT"],
+      "requires3dGlasses": false
+    },
+    {
+      "id": "824-1006",
+      "filmId": "FILM-1",
+      "schedule": { "startsAt": "2026-10-25T00:15:00+01:00" },
+      "attributeIds": [],
+      "requires3dGlasses": false
+    }
+  ],
+  "relatedData": {
+    "films": [
+      { "id": "FILM-1", "title": { "text": "The Example Film 3D" } },
+      { "id": "FILM-2", "title": { "text": "Made Up Concert: Live" } },
+      { "id": "FILM-3", "title": { "text": "Imaginary Picture (Tamil)" } },
+      { "id": "FILM-4", "title": { "text": "Pretend Pups" } }
+    ],
+    "attributes": [
+      { "id": "A-AD", "shortName": { "text": "AudioDes" }, "name": { "text": "Audio Described" } },
+      { "id": "A-3D", "shortName": { "text": "3D" }, "name": { "text": "3D" } },
+      { "id": "A-IMAX", "shortName": { "text": "IMAX" }, "name": { "text": "IMAX" } },
+      { "id": "A-KOREAN", "shortName": { "text": "KoreanLang" }, "name": { "text": "Korean (Audio)" } },
+      { "id": "A-TAMIL", "shortName": { "text": "TamilA" }, "name": { "text": "Tamil (Audio)" } },
+      { "id": "A-SUB", "shortName": { "text": "EnglishSub" }, "name": { "text": "English (Sub)" } },
+      { "id": "A-EVENT", "shortName": { "text": "EventCinem" }, "name": { "text": "Event Cinema" } },
+      { "id": "A-KIDS", "shortName": { "text": "ODEON Kids" }, "name": { "text": "ODEON Kids" } },
+      { "id": "A-CAPT", "shortName": { "text": "OpenCapt" }, "name": { "text": "Open Captioned" } }
+    ]
+  }
+}

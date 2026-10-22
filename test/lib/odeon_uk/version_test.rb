@@ -1,7 +1,7 @@
 require_relative '../../test_helper'
 
-describe OdeonUk do
-  it 'must be defined' do
-    OdeonUk::VERSION.wont_be_nil
+class OdeonUk::VersionTest < Minitest::Test
+  def test_version_is_defined
+    refute_nil OdeonUk::VERSION
   end
 end

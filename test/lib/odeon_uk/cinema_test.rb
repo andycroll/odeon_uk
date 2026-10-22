@@ -1,262 +1,113 @@
 require_relative '../../test_helper'
 
-describe OdeonUk::Cinema do
-  include ApiFixturesHelper
+class OdeonUk::CinemaTest < Minitest::Test
+  def setup
+    @api_response = FakeApiResponse.new
+  end
 
-  let(:described_class) { OdeonUk::Cinema }
-  let(:api_response) { FakeApiResponse.new }
+  def test_new_returns_cinema_with_string_id
+    cinema = OdeonUk::Cinema.new(824)
 
-  before { WebMock.disable_net_connect! }
-  after { WebMock.allow_net_connect! }
+    assert_instance_of OdeonUk::Cinema, cinema
+    assert_equal '824', cinema.id
+  end
 
-  describe '.new(id)' do
-    subject { described_class.new(id) }
+  def test_new_zero_pads_id
+    assert_equal '017', OdeonUk::Cinema.new(17).id
+  end
 
-    describe 'Brighton' do
-      let(:id) { 71 }
+  def test_all_returns_cinemas
+    with_fake_api do
+      cinemas = OdeonUk::Cinema.all
 
-      it 'returns a cinema with a string id' do
-        subject.must_be_instance_of(described_class)
-        subject.id.must_equal(id.to_s)
-      end
+      assert(cinemas.all? { |cinema| cinema.instance_of?(OdeonUk::Cinema) })
+      assert_equal %w(017 153 824 955), cinemas.map(&:id)
     end
   end
 
-  describe '.all' do
-    subject { described_class.all }
+  def test_adr_has_no_postcode
+    expected = {
+      street_address:   '3 Example Parade',
+      extended_address: 'Seafront',
+      locality:         'Brighton',
+      region:           nil,
+      postal_code:      nil,
+      country_name:     'United Kingdom'
+    }
 
-    it 'returns an array of cinemas' do
-      OdeonUk::Internal::ApiResponse.stub :new, api_response do
-        subject.must_be_instance_of(Array)
-        subject.each do |element|
-          element.must_be_instance_of(described_class)
-        end
-        subject.count.must_be :>, 100
-      end
+    with_fake_api do
+      assert_equal expected, OdeonUk::Cinema.new(824).adr
     end
   end
 
-  describe '#adr' do
-    subject { described_class.new(id).adr }
+  def test_address_for_london
+    expected = {
+      street_address:   '2 Example Square',
+      extended_address: '',
+      locality:         'London',
+      region:           nil,
+      postal_code:      nil,
+      country_name:     'United Kingdom'
+    }
 
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal(street_address:   'Kingswest',
-                             extended_address: nil,
-                             locality:         'Brighton',
-                             region:           nil,
-                             postal_code:      'BN1 2RE',
-                             country_name:     'United Kingdom')
-        end
-      end
+    with_fake_api do
+      assert_equal expected, OdeonUk::Cinema.new(153).address
     end
   end
 
-  describe '#address' do
-    subject { described_class.new(id).address }
+  def test_brand
+    assert_equal 'Odeon', OdeonUk::Cinema.new(824).brand
+  end
 
-    describe 'London address' do
-      let(:id) { 105 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal(street_address:   '24-26 Leicester Square',
-                             extended_address: nil,
-                             locality:         'London',
-                             region:           nil,
-                             postal_code:      'WC2H 7JY',
-                             country_name:     'United Kingdom')
-        end
-      end
+  def test_full_name
+    with_fake_api do
+      assert_equal 'Odeon Brighton', OdeonUk::Cinema.new(824).full_name
+      assert_equal 'Odeon Leicester Square', OdeonUk::Cinema.new(153).full_name
     end
   end
 
-  describe '#brand' do
-    subject { described_class.new(id).brand }
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Odeon'
-        end
-      end
+  def test_name_removes_london_prefix
+    with_fake_api do
+      assert_equal 'Leicester Square', OdeonUk::Cinema.new(153).name
     end
   end
 
-  describe '#country_name' do
-    subject { described_class.new(id).country_name }
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'United Kingdom'
-        end
-      end
+  def test_postal_code_is_empty
+    with_fake_api do
+      assert_equal '', OdeonUk::Cinema.new(824).postal_code
     end
   end
 
-  describe '#extended_address' do
-    subject { described_class.new(id).extended_address }
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal ''
-        end
-      end
+  def test_slug
+    with_fake_api do
+      assert_equal 'odeon-brighton', OdeonUk::Cinema.new(824).slug
     end
   end
 
-  describe '#full_name' do
-    subject { described_class.new(id).full_name }
-    describe 'Brighton' do
-      let(:id) { 71 }
-
-      it 'returns cinema name' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Odeon Brighton'
-        end
-      end
-    end
-
-    describe 'Leicester Square' do
-      let(:id) { 105 }
-
-      it 'returns cinema name' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Odeon Leicester Square'
-        end
-      end
+  def test_url
+    with_fake_api do
+      assert_equal 'https://www.odeon.co.uk/cinemas/brighton/',
+                   OdeonUk::Cinema.new(824).url
     end
   end
 
-  describe '#locality' do
-    subject { described_class.new(id).locality }
-    describe 'Short Address (Brighton)' do
-      let(:id) { 71 }
-
-      it 'returns town name' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Brighton'
-        end
-      end
+  def test_url_keeps_london_prefix
+    with_fake_api do
+      assert_equal 'https://www.odeon.co.uk/cinemas/london-leicester-square/',
+                   OdeonUk::Cinema.new(153).url
     end
   end
 
-  describe '#name' do
-    subject { described_class.new(id).name }
-    describe 'Brighton' do
-      let(:id) { 71 }
-
-      it 'returns cinema name' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Brighton'
-        end
-      end
-    end
-
-    describe 'Leicester Square' do
-      let(:id) { 105 }
-
-      it 'returns cinema name' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Leicester Square'
-        end
-      end
+  def test_url_uses_slug_that_differs_from_name
+    with_fake_api do
+      assert_equal 'https://www.odeon.co.uk/cinemas/manchester-trafford-centre/',
+                   OdeonUk::Cinema.new(955).url
     end
   end
 
-  describe '#postal_code' do
-    subject { described_class.new(id).postal_code }
-    describe 'short address' do
-      let(:id) { 71 }
+  private
 
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'BN1 2RE'
-        end
-      end
-    end
-
-    describe 'short address (London)' do
-      let(:id) { 211 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'SE1 8XR'
-        end
-      end
-    end
-
-    describe 'short address (extra London Postcode)' do
-      let(:id) { 105 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'WC2H 7JY'
-        end
-      end
-    end
-  end
-
-  describe '#region' do
-    subject { described_class.new(id).region }
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns the postcode' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal ''
-        end
-      end
-    end
-  end
-
-  describe '#slug' do
-    subject { described_class.new(id).slug }
-
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns first line of address' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'odeon-brighton'
-        end
-      end
-    end
-  end
-
-  describe '#street_address' do
-    subject { described_class.new(id).street_address }
-
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns first line of address' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'Kingswest'
-        end
-      end
-    end
-  end
-
-  describe '#url' do
-    subject { described_class.new(id).url }
-
-    describe 'short address' do
-      let(:id) { 71 }
-
-      it 'returns first line of address' do
-        OdeonUk::Internal::ApiResponse.stub :new, api_response do
-          subject.must_equal 'http://www.odeon.co.uk/cinemas/brighton/71/'
-        end
-      end
-    end
+  def with_fake_api(&block)
+    OdeonUk::Internal::ApiResponse.stub(:new, @api_response, &block)
   end
 end

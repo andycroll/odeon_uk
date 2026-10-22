@@ -4,6 +4,7 @@ SimpleCov.start do
 end
 
 require 'minitest/autorun'
+require 'minitest/mock'
 require 'minitest/reporters'
 
 Minitest::Reporters.use! [
@@ -11,9 +12,9 @@ Minitest::Reporters.use! [
 ]
 
 require 'webmock/minitest'
-WebMock.allow_net_connect!
 
 require File.expand_path('../../lib/odeon_uk.rb', __FILE__)
 
 require_relative 'support/api_fixtures_helper'
+require_relative 'support/api_shapes'
 require_relative 'support/fake_api_response'

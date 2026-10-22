@@ -2,22 +2,28 @@ module OdeonUk
   # The object representing a cinema on the Odeon UK website
   class Cinema < Cinebase::Cinema
     # @!attribute [r] id
-    #   @return [Integer] the numeric id of the cinema on the Cineworld website
+    #   @return [String] the zero-padded id of the cinema, e.g. '017'
+
+    # Vista site ids whose page slug differs from the cinema name
+    URL_SLUGS = {
+      '915' => 'dudley-merry-hill',
+      '955' => 'manchester-trafford-centre'
+    }.freeze
 
     # Constructor
-    # @param [Integer, String] id the cinema id of the format 71/'71' as used on
+    # @param [Integer, String] id the cinema id of the format 17/'017'
     # @return [OdeonUk::Cinema]
     def initialize(id)
-      @id = id.to_s
+      @id = id.to_s.rjust(3, '0')
     end
 
-    # Return basic cinema information for all cinemas
+    # Return basic cinema information for all UK cinemas
     # @return [Array<OdeonUk::Cinema>]
     # @example
     #   OdeonUk::Cinema.all
     #   #=> [<OdeonUk::Cinema>, <OdeonUk::Cinema>, ...]
     def self.all
-      cinemas_hash.keys.map { |cinema_id| new(cinema_id) }
+      sites_hash.keys.map { |cinema_id| new(cinema_id) }
     end
 
     # @!method address
@@ -29,23 +35,26 @@ module OdeonUk
     # @return [Hash] contains :street_address, :extended_address,
     # :locality, :postal_code, :country
     # @example
-    #   cinema = OdeonUk::Cinema.new(3)
+    #   cinema = OdeonUk::Cinema.new(824)
     #   cinema.adr
     #   #=> {
-    #         street_address: '44-47 Gardner Street',
-    #         extended_address: 'North Laine',
+    #         street_address: 'Kingswest',
+    #         extended_address: 'West Street',
     #         locality: 'Brighton',
-    #         postal_code: 'BN1 1UN',
+    #         region: nil,
+    #         postal_code: nil,
     #         country_name: 'United Kingdom'
     #       }
     # @note Uses the standard method naming as at http://microformats.org/wiki/adr
+    # @note The API does not supply postcodes
     def adr
+      address = site_hash.dig('contactDetails', 'address') || {}
       {
-        street_address:   cinema_hash['siteAddress1'],
-        extended_address: nil,
-        locality:         cinema_hash['siteAddress2'],
+        street_address:   address['line1'],
+        extended_address: address['line2'],
+        locality:         address['city'],
         region:           nil,
-        postal_code:      cinema_hash['sitePostcode'],
+        postal_code:      nil,
         country_name:     'United Kingdom'.freeze
       }
     end
@@ -103,7 +112,7 @@ module OdeonUk
     #   cinema.name
     #   #=> 'Brighton'
     def name
-      @name ||= cinema_hash['siteName'].gsub(/\ALondon /, '').gsub(' - ', ': ')
+      @name ||= site_name.gsub(/\ALondon /, '').gsub(' - ', ': ')
     end
 
     # @!method postal_code
@@ -142,22 +151,31 @@ module OdeonUk
     # The url of the cinema on the Cineworld website
     # @return [String]
     def url
-      "http://www.odeon.co.uk/cinemas/#{urlized_name}/#{id}/"
+      "https://www.odeon.co.uk/cinemas/#{url_slug}/"
     end
+
+    # @api private
+    def self.sites_hash
+      @sites_hash ||= OdeonUk::Internal::ApiResponse.new.sites.to_h do |site|
+        [site.fetch('id'), site]
+      end
+    end
+    private_class_method :sites_hash
 
     private
 
-    def self.cinemas_hash
-      @cinemas_hash ||=
-        OdeonUk::Internal::ApiResponse.new.all_cinemas.fetch('sites', {})
+    def site_hash
+      @site_hash ||= self.class.send(:sites_hash).fetch(id, {})
     end
 
-    def cinema_hash
-      @cinema_hash ||= self.class.cinemas_hash.fetch(id, {})
+    def site_name
+      site_hash.dig('name', 'text').to_s
     end
 
-    def urlized_name
-      name.downcase.gsub(/[^a-z0-9]/, '_')
+    def url_slug
+      URL_SLUGS.fetch(id) do
+        site_name.downcase.gsub(/[^a-z0-9]+/, '-').gsub(/\A-|-\z/, '')
+      end
     end
   end
 end

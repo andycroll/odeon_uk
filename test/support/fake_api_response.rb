@@ -3,15 +3,18 @@ require_relative 'api_fixtures_helper'
 class FakeApiResponse
   include ApiFixturesHelper
 
-  def app_init
-    parse(app_init_plist)
+  attr_reader :requested_dates
+
+  def initialize
+    @requested_dates = []
   end
 
-  def all_cinemas
-    parse(all_cinemas_plist)
+  def sites
+    JSON.parse(sites_json).fetch('sites')
   end
 
-  def film_times(cinema_id, film_id)
-    parse(film_times_plist(cinema_id, film_id))
+  def showtimes(cinema_id, date)
+    @requested_dates << date
+    JSON.parse(showtimes_json(cinema_id))
   end
 end

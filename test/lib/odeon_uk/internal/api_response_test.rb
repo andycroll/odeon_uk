@@ -1,47 +1,66 @@
 require_relative '../../../test_helper'
 
-describe OdeonUk::Internal::ApiResponse do
+class OdeonUk::Internal::ApiResponseTest < Minitest::Test
   include ApiFixturesHelper
 
-  let(:described_class) { OdeonUk::Internal::ApiResponse }
+  BASE_URL = 'https://vwc.odeon.co.uk/WSVistaWebClient/ocapi/v1'.freeze
+  HEADERS = {
+    'Authorization' => 'Bearer guest-jwt', 'Connect-Region-Code' => 'UK'
+  }.freeze
 
-  before { WebMock.disable_net_connect! }
-  after { WebMock.allow_net_connect! }
-
-  describe '#app_init' do
-    subject { described_class.new.app_init }
-
-    before { stub_post('app-init', nil, app_init_plist) }
-
-    it 'returns a hash' do
-      subject.class.must_equal Hash
-      subject.keys.must_equal(%w(films offers))
-    end
+  def setup
+    OdeonUk.token = 'guest-jwt'
   end
 
-  describe '#all_cinemas' do
-    subject { described_class.new.all_cinemas }
-
-    before { stub_post('all-cinemas', nil, all_cinemas_plist) }
-
-    it 'returns a hash' do
-      subject.class.must_equal Hash
-      subject.keys.must_equal(%w(sites))
-    end
+  def teardown
+    OdeonUk.token = nil
+    super
   end
 
-  describe '#showtimes(id)' do
-    subject { described_class.new.film_times(71, 15_130) }
+  def test_sites
+    stub_request(:get, "#{BASE_URL}/sites")
+      .with(headers: HEADERS)
+      .to_return(status: 200, body: sites_json)
 
-    before do
-      stub_post('film-times',
-                { s: '71', m: '15130' },
-                film_times_plist_random)
-    end
+    sites = api.sites
 
-    it 'returns an array' do
-      subject.class.must_equal Array
-      subject.each { |group| group.keys.must_equal(%w(date attributes)) }
-    end
+    assert_kind_of Array, sites
+    assert_includes sites.first.keys, 'id'
+  end
+
+  def test_showtimes
+    stub_request(:get, "#{BASE_URL}/showtimes/by-business-date/2026-10-24")
+      .with(query: { 'siteIds' => '824' }, headers: HEADERS)
+      .to_return(status: 200, body: showtimes_json('824'))
+
+    showtimes = api.showtimes('824', Date.new(2026, 10, 24))
+
+    assert_equal %w(businessDate relatedData showtimes), showtimes.keys.sort
+  end
+
+  def test_missing_token_raises_before_request
+    OdeonUk.token = nil
+
+    assert_raises(OdeonUk::AuthenticationError) { api.sites }
+  end
+
+  def test_rejected_token_raises
+    stub_request(:get, "#{BASE_URL}/sites").to_return(status: 401)
+
+    assert_raises(OdeonUk::AuthenticationError) { api.sites }
+  end
+
+  def test_server_error_omits_body
+    stub_request(:get, "#{BASE_URL}/sites").to_return(status: 500, body: 'secret')
+
+    error = assert_raises(RuntimeError) { api.sites }
+
+    assert_equal 'Vista HTTP error 500', error.message
+  end
+
+  private
+
+  def api
+    OdeonUk::Internal::ApiResponse.new
   end
 end

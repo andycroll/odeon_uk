@@ -2,6 +2,34 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 - 2026-10-22
+
+### Changed
+- Retrieve cinemas and performances from the Vista API behind odeon.co.uk instead of the retired iOS plist API.
+- Cinema ids are Vista site ids, zero-padded strings such as `'017'` and `'824'` (Brighton was `71`).
+- `Cinema.all` returns UK cinemas only.
+- `Cinema#adr` includes the second address line. Postcodes are no longer available.
+- `Cinema#url` points at the current cinema pages.
+- `Performance.at` accepts inclusive `from:` and `to:` business dates, defaulting to today in London and the following 13 days. One request per day.
+- Performance times come from Vista's explicit UTC offsets.
+- Title sanitizer handles Met Opera and RBO season prefixes, language and encore suffixes.
+- Require Ruby 3.4 or newer and cinebase 5.2, which now holds the shared Vista client, guest token retrieval, packaging task and common title rules.
+- Film titles drop dub, subtitle, language, anniversary and Q&A markers, and festival prefixes.
+- Convert tests from minitest spec syntax to plain `Minitest::Test` classes.
+
+### Added
+- `OdeonUk.token` for a caller-supplied guest JWT, and `OdeonUk.acquire_token!` to fetch one with `curl-impersonate`.
+- Platform gems that bundle curl-impersonate 2.2.3.
+- `OdeonUk::AuthenticationError` for missing, expired and rejected tokens.
+- `Performance#booking_url`, `Performance#language`, `Performance#subtitled?` and `Performance#festival` (a `Cinebase::Festival` with `name` and `year`).
+- `audio_described`, `autism_friendly` and `subtitled` variants.
+- Live integration tests and GitHub Actions CI on Ruby 3.4 and 4.0.
+- Live API shape tests that check real responses without storing them.
+
+### Removed
+- CFPropertyList dependency, Travis CI and Code Climate.
+- Recorded API fixtures and the `fixtures` rake task. Fixtures are hand-written.
+
 ## 4.0.1 - 2016-02-11
 
 ### Fixed
