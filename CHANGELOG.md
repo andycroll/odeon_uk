@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.1 - 2026-10-22
+
+### Changed
+- Reuse one Vista client, and so one kept-alive connection, for all requests until the token changes, instead of opening a TLS connection for every request. Requires cinebase 5.5.
+
 ## 5.1.0 - 2026-10-22
 
 ### Added
