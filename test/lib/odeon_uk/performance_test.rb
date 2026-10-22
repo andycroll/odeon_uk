@@ -49,6 +49,7 @@ class OdeonUk::PerformanceTest < Minitest::Test
     korean = performances[2]
 
     assert_equal 'Imaginary Picture', tamil.film_name
+    assert_equal 2025, tamil.film_year
     assert_equal 'Tamil', tamil.language
     assert tamil.subtitled?
     assert_equal 'Korean', korean.language
@@ -108,6 +109,10 @@ class OdeonUk::PerformanceTest < Minitest::Test
     performance = OdeonUk::Performance.new(options(festival: festival))
 
     assert_equal festival, performance.festival
+  end
+
+  def test_film_year
+    assert_equal 1996, OdeonUk::Performance.new(options(film_year: 1996)).film_year
   end
 
   def test_subtitled

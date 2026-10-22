@@ -40,6 +40,7 @@ module OdeonUk
               dimension: @data["requires3dGlasses"] ? "3d" : "2d",
               festival: Cinebase::Festival.from_title(title, year: starting_at.year),
               film_name: film_name,
+              film_year: Cinebase::TitleSanitizer.film_year(title),
               language: language,
               starting_at: starting_at,
               variant: variant
