@@ -122,6 +122,9 @@ performance.dimension
 performance.variant
 #=> ['audio_described', 'imax']
 
+performance.film_year
+#=> 1996 # from the title, nil when it has no year
+
 performance.language
 #=> 'Korean' # audio language, nil when the cinema does not tag one
 

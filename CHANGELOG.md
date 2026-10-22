@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.0 - 2026-10-22
+
+### Added
+- `Performance#film_year`, read from a trailing `(1996)` in the title.
+
+### Changed
+- Require cinebase 5.3. Film titles lose their year suffix, `(Re-release)` and Lithuanian markers, and `Horror Season` prefixes become festivals.
+
 ## 5.0.0 - 2026-10-22
 
 ### Changed

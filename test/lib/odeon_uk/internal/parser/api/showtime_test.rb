@@ -3,7 +3,8 @@ require_relative '../../../../../test_helper'
 class OdeonUk::Internal::Parser::Api::ShowtimeTest < Minitest::Test
   FILMS = {
     'HO1' => { 'title' => { 'text' => 'Jailer 2 (Tamil)' } },
-    'HO2' => { 'title' => { 'text' => 'Cine-Excess 2026: Scum Of The Earth' } }
+    'HO2' => { 'title' => { 'text' => 'Cine-Excess 2026: Scum Of The Earth' } },
+    'HO3' => { 'title' => { 'text' => 'From Dusk Till Dawn (1996)' } }
   }.freeze
 
   ATTRIBUTES = {
@@ -20,6 +21,7 @@ class OdeonUk::Internal::Parser::Api::ShowtimeTest < Minitest::Test
       dimension: '2d',
       festival: nil,
       film_name: 'Jailer 2',
+      film_year: nil,
       language: nil,
       starting_at: Time.utc(2026, 10, 24, 17, 30),
       variant: []
@@ -45,6 +47,13 @@ class OdeonUk::Internal::Parser::Api::ShowtimeTest < Minitest::Test
 
     assert_equal Cinebase::Festival.new(name: 'Cine-Excess', year: 2026), showtime[:festival]
     assert_equal 'Scum Of The Earth', showtime[:film_name]
+  end
+
+  def test_film_year_moves_from_title_to_attribute
+    showtime = parse(film_id: 'HO3')
+
+    assert_equal 1996, showtime[:film_year]
+    assert_equal 'From Dusk Till Dawn', showtime[:film_name]
   end
 
   def test_open_captions_and_subtitles_are_one_variant
