@@ -20,19 +20,25 @@ module OdeonUk
     #   @option options [String] :dimension ('2d') dimension of the screening
     #   @option options [String] :film_name name of the film
     #   @option options [Time] :starting_at listed start time of the performance
+    #   @option options [Cinebase::Festival] :festival (nil) festival edition
+    #   @option options [String] :language (nil) audio language of the screening
 
-    # All currently listed films showing at a cinema
-    # @param [Integer] cinema_id id of the cinema on the website
+    # Performances within an inclusive range of cinema business dates.
+    # @param [Integer, String] cinema_id id of the cinema on the website
+    # @param [Date] from first date (defaults to today in London)
+    # @param [Date] to last date (defaults to 13 days after from)
     # @return [Array<OdeonUk::Performance>]
-    def self.at(cinema_id)
-      cinema_id = cinema_id.to_i
-      film_ids_at(cinema_id).flat_map do |film_id|
-        api_response.film_times(cinema_id, film_id).flat_map do |day|
-          performance_days(day).map do |hash|
-            new(hash.merge(cinema_hash(cinema_id))
-                    .merge(film_name: film_name(film_id)))
-          end
-        end
+    def self.at(
+      cinema_id,
+      from: TZInfo::Timezone.get('Europe/London').now.to_date,
+      to: from + 13
+    )
+      raise ArgumentError, 'to must not precede from' if to < from
+
+      api = OdeonUk::Internal::ApiResponse.new
+      cinema = Cinema.new(cinema_id)
+      (from..to).flat_map do |date|
+        performances_on(api, cinema, date)
       end
     end
 
@@ -48,41 +54,28 @@ module OdeonUk
     #   The kinds of screening (IMAX, kids, baby, senior)
     #   @return <Array[String]>
 
+
     # private
 
-    def self.api_response
-      @api_response ||= OdeonUk::Internal::ApiResponse.new
-    end
-    private_class_method :api_response
+    def self.performances_on(api, cinema, date)
+      response = api.showtimes(cinema.id, date)
+      related = response.fetch('relatedData')
+      films = by_id(related.fetch('films'))
+      attributes = by_id(related.fetch('attributes'))
 
-    def self.cinema_hash(cinema_id)
-      { cinema_id: cinema_id, cinema_name: Cinema.new(cinema_id).name }
+      response.fetch('showtimes').map do |data|
+        showtime = OdeonUk::Internal::Parser::Api::Showtime.new(
+          data, films: films, attributes: attributes
+        )
+        new(showtime.to_hash.merge(cinema_id: cinema.id,
+                                   cinema_name: cinema.name))
+      end
     end
-    private_class_method :cinema_hash
+    private_class_method :performances_on
 
-    def self.films_at(cinema_id)
-      film_lookup.at(cinema_id)
+    def self.by_id(items)
+      items.to_h { |item| [item.fetch('id'), item] }
     end
-    private_class_method :films_at
-
-    def self.film_lookup
-      @film_lookup ||= OdeonUk::Internal::Parser::Api::FilmLookup.new
-    end
-    private_class_method :film_lookup
-
-    def self.film_ids_at(cinema_id)
-      films_at(cinema_id).keys
-    end
-    private_class_method :film_ids_at
-
-    def self.film_name(film_id)
-      film_lookup.to_hash[film_id]['title']
-    end
-    private_class_method :film_name
-
-    def self.performance_days(data)
-      OdeonUk::Internal::Parser::Api::PerformanceDay.new(data).to_a
-    end
-    private_class_method :performance_days
+    private_class_method :by_id
   end
 end

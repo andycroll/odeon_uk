@@ -1,55 +1,35 @@
-require 'cfpropertylist'
-require 'net/http'
+# frozen_string_literal: true
+
+require "date"
 
 module OdeonUk
   # Internal utility classes: Do not use
   # @api private
   module Internal
-    # Utility class to make calls to the odeon website
+    # Fetches cinema and showtime data from the Vista API behind odeon.co.uk
     class ApiResponse
-      # iOS app API version
-      VERSION = '2.1'.freeze
+      BASE_URL = "https://vwc.odeon.co.uk/WSVistaWebClient/ocapi/v1/"
+      # Limits sites to the UK, leaving out ODEON's Irish cinemas.
+      REGION_CODE = "UK"
 
-      # cinemas information
-      # @return [Hash] decoded response of api containing cinema details
-      def all_cinemas
-        parse(all_cinemas_raw)
+      # @return [Array<Hash>] UK cinemas
+      def sites
+        client.get("sites").fetch("sites")
       end
 
-      # application initialize
-      # @return [Hash] decoded response of api, mostly films
-      def app_init
-        parse(app_init_raw)
-      end
-
-      # showings for a film at a cinema
-      # @return [Hash] decoded response of api, day split times
-      def film_times(cinema_id, film_id)
-        parse(film_times_raw(cinema_id, film_id))
+      # @param [String] cinema_id zero-padded site id, e.g. '017'
+      # @param [Date] date business date
+      # @return [Hash] showtimes plus their related films and attributes
+      def showtimes(cinema_id, date)
+        client.get("showtimes/by-business-date/#{date.iso8601}",
+                   "siteIds" => cinema_id)
       end
 
       private
 
-      def all_cinemas_raw
-        post('all-cinemas').body
-      end
-
-      def app_init_raw
-        post('app-init').body
-      end
-
-      def film_times_raw(cinema_id, film_id)
-        post('film-times', { s: cinema_id, m: film_id }).body
-      end
-
-      def post(path, request_body={})
-        uri = URI("https://api.odeon.co.uk/#{VERSION}/api/#{path}")
-        Net::HTTP.post_form(uri, request_body)
-      end
-
-      def parse(content)
-        plist = CFPropertyList::List.new(data: content)
-        CFPropertyList.native_types(plist.value).fetch('data', {})
+      def client
+        Cinebase::Vista::Client.new(base_url: BASE_URL, region_code: REGION_CODE,
+                                    token: OdeonUk.token)
       end
     end
   end
