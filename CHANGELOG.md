@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - `Performance#film_year`, read from a trailing `(1996)` in the title.
 
 ### Changed
-- Require cinebase 5.3. Film titles lose their year suffix, `(Re-release)` and Lithuanian markers, and `Horror Season` prefixes become festivals.
+- Require cinebase 5.4. Film titles lose their year suffix, `(Re-release)` and Lithuanian markers, `+ ... Q&A` and `+ Discussion` add-ons, `(35mm)`, `(70mm)` and `4K` markers; `Horror Season` and `CFF:` prefixes become festivals.
 
 ## 5.0.0 - 2026-10-22
 
