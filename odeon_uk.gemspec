@@ -27,5 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '< 1'
   spec.add_development_dependency 'webmock'
 
-  spec.add_runtime_dependency 'cinebase', '~> 5.3'
+  spec.add_runtime_dependency 'cinebase', '~> 5.4'
 end
