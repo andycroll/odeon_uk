@@ -14,18 +14,25 @@ module OdeonUk
 
       # @return [Array<Hash>] UK cinemas
       def sites
-        client.get("sites").fetch("sites")
+        get("sites").fetch("sites")
       end
 
       # @param [String] cinema_id zero-padded site id, e.g. '017'
       # @param [Date] date business date
       # @return [Hash] showtimes plus their related films and attributes
       def showtimes(cinema_id, date)
-        client.get("showtimes/by-business-date/#{date.iso8601}",
+        get("showtimes/by-business-date/#{date.iso8601}",
                    "siteIds" => cinema_id)
       end
 
       private
+
+      def get(path, query = {})
+        client.get(path, query)
+      rescue Cinebase::Vista::AuthenticationError
+        OdeonUk.reject_token!(@client_token)
+        raise
+      end
 
       # One client keeps one connection open, so reuse it until the token changes.
       def client

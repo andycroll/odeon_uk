@@ -50,6 +50,14 @@ class OdeonUk::Internal::ApiResponseTest < Minitest::Test
     assert_raises(OdeonUk::AuthenticationError) { api.sites }
   end
 
+  def test_rejected_token_is_cleared
+    stub_request(:get, "#{BASE_URL}/sites").to_return(status: 401)
+
+    assert_raises(OdeonUk::AuthenticationError) { api.sites }
+
+    assert_nil OdeonUk.token
+  end
+
   def test_server_error_omits_body
     stub_request(:get, "#{BASE_URL}/sites").to_return(status: 500, body: 'secret')
 

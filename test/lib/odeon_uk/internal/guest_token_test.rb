@@ -51,6 +51,13 @@ class OdeonUk::Internal::GuestTokenTest < Minitest::Test
     assert_match(/curl-impersonate/, error.message)
   end
 
+  def test_ensure_token_fetches_only_without_a_current_token
+    token = token_expiring_at(Time.now + 7200)
+
+    assert_equal token, OdeonUk.ensure_token!(curl: fake_curl("#{page_with(token)}\n200"))
+    assert_equal token, OdeonUk.ensure_token!(curl: File.join(@directory, 'missing'))
+  end
+
   def test_acquire_token_sets_token
     token = token_expiring_at(Time.now + 3600)
 

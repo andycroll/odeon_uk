@@ -18,13 +18,10 @@ require_relative './odeon_uk/performance'
 module OdeonUk
   AuthenticationError = Cinebase::Vista::AuthenticationError
 
-  # A raw guest JWT, without the "Bearer " prefix. Never persisted by the gem.
-  class << self
-    attr_accessor :token
+  extend Cinebase::Vista::TokenHolder
 
-    # Explicit acquisition/renewal; ordinary API calls never launch a subprocess.
-    def acquire_token!(curl: nil)
-      self.token = Internal::GuestToken.new(curl: curl).fetch
-    end
+  # @api private
+  def self.guest_token_class
+    Internal::GuestToken
   end
 end
