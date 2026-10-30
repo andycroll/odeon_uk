@@ -15,6 +15,11 @@ module ApiShapes
       %w(line1 line2 city).each do |key|
         assert_kind_of String, address.fetch(key), "site #{site['id']} #{key}"
       end
+      location = site['location'] || {}
+      %w(latitude longitude).each do |key|
+        value = location[key]
+        assert_kind_of Numeric, value, "site #{site['id']} #{key}" unless value.nil?
+      end
     end
   end
 

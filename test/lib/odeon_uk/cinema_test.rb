@@ -66,6 +66,31 @@ class OdeonUk::CinemaTest < Minitest::Test
     end
   end
 
+  def test_latitude_and_longitude
+    with_fake_api do
+      cinema = OdeonUk::Cinema.new(824)
+
+      assert_in_delta 50.8215, cinema.latitude, 0.0001
+      assert_in_delta(-0.146, cinema.longitude, 0.0001)
+    end
+  end
+
+  def test_latitude_and_longitude_are_nil_without_a_location
+    with_fake_api do
+      [153, 955].each do |id|
+        assert_nil OdeonUk::Cinema.new(id).latitude
+        assert_nil OdeonUk::Cinema.new(id).longitude
+      end
+    end
+  end
+
+  def test_latitude_and_longitude_are_nil_at_zero_zero
+    with_fake_api do
+      assert_nil OdeonUk::Cinema.new(17).latitude
+      assert_nil OdeonUk::Cinema.new(17).longitude
+    end
+  end
+
   def test_name_removes_london_prefix
     with_fake_api do
       assert_equal 'Leicester Square', OdeonUk::Cinema.new(153).name
