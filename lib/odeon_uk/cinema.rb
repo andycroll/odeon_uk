@@ -105,6 +105,26 @@ module OdeonUk
     #     cinema.locality
     #     #=> 'Brighton'
 
+    # Latitude of the cinema
+    # @return [Float, nil] decimal degrees, or nil when unknown
+    # @example
+    #   cinema = OdeonUk::Cinema.new(824)
+    #   cinema.latitude
+    #   #=> 50.821
+    def latitude
+      coordinates&.first
+    end
+
+    # Longitude of the cinema
+    # @return [Float, nil] decimal degrees, or nil when unknown
+    # @example
+    #   cinema = OdeonUk::Cinema.new(824)
+    #   cinema.longitude
+    #   #=> -0.1452
+    def longitude
+      coordinates&.last
+    end
+
     # The name of the cinema
     # @return [String]
     # @example
@@ -163,6 +183,13 @@ module OdeonUk
     private_class_method :sites_hash
 
     private
+
+    # 0, 0 marks a site whose position was never set
+    def coordinates
+      location = site_hash['location'] || {}
+      pair = [location['latitude'], location['longitude']]
+      pair.map(&:to_f) if pair.all?(Numeric) && pair.any?(&:nonzero?)
+    end
 
     def site_hash
       @site_hash ||= self.class.send(:sites_hash).fetch(id, {})

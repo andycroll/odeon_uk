@@ -3,6 +3,7 @@
     {
       "id": "017",
       "name": { "text": "Birmingham New Street" },
+      "location": { "latitude": 0, "longitude": 0 },
       "contactDetails": {
         "address": { "line1": "1 Example Arcade", "line2": "New Street", "city": "Birmingham" }
       }
@@ -10,6 +11,7 @@
     {
       "id": "153",
       "name": { "text": "London Leicester Square" },
+      "location": null,
       "contactDetails": {
         "address": { "line1": "2 Example Square", "line2": "", "city": "London" }
       }
@@ -17,6 +19,7 @@
     {
       "id": "824",
       "name": { "text": "Brighton" },
+      "location": { "latitude": 50.8215, "longitude": -0.146 },
       "contactDetails": {
         "address": { "line1": "3 Example Parade", "line2": "Seafront", "city": "Brighton" }
       }
