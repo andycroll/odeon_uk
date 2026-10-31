@@ -110,7 +110,7 @@ module OdeonUk
     # @example
     #   cinema = OdeonUk::Cinema.new(824)
     #   cinema.latitude
-    #   #=> 50.8215
+    #   #=> 50.821
     def latitude
       coordinates&.first
     end
@@ -120,7 +120,7 @@ module OdeonUk
     # @example
     #   cinema = OdeonUk::Cinema.new(824)
     #   cinema.longitude
-    #   #=> -0.146
+    #   #=> -0.1452
     def longitude
       coordinates&.last
     end

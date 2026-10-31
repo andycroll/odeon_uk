@@ -106,10 +106,10 @@ cinema.id
 #=> '824'
 
 cinema.latitude
-#=> 50.8215 # Float, nil when the API has no location
+#=> 50.821 # Float, nil when the API has no location
 
 cinema.longitude
-#=> -0.146
+#=> -0.1452
 
 cinema.url
 #=> 'https://www.odeon.co.uk/cinemas/brighton/'
