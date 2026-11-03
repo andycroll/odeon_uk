@@ -126,8 +126,8 @@ class OdeonUk::Internal::TitleSanitizerTest < Minitest::Test
     assert_sanitized 'Inside Out', 'Charity Screening -  Inside Out'
   end
 
-  def test_world_tour_is_not_capitalised
-    assert_sanitized "ENHYPEN World Tour 'BLOOD SAGA'", "ENHYPEN WORLD TOUR 'BLOOD SAGA'"
+  def test_world_tour_titles_in_capitals_are_title_cased
+    assert_sanitized "Enhypen World Tour 'Blood Saga'", "ENHYPEN WORLD TOUR 'BLOOD SAGA'"
   end
 
   def test_keeps_titles_with_their_own_subtitles
