@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [5.3.0] - 2026-11-03
+
+### Changed
+- Uses cinebase 5.9: performances take the raw `title:`, so audience labels become variants, and series prefixes such as `Met Opera:` become the performance's `event`.
+- National Theatre Live and Bolshoi screenings are named `National Theatre Live: ` and `Bolshoi Ballet: `, the prefixes cinebase moves to `event`. Titles listed in capitals, such as `SCREAM`, are title cased.
+
+### Fixed
+- `ODEON Pride Nights - A Wolf Among the Swans` is now `A Wolf Among the Swans`.
+- `Charity Screening -  Inside Out` is now `Inside Out`.
+
 ## 5.2.0 - 2026-10-31
 
 ### Added

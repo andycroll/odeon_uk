@@ -24,6 +24,7 @@ class OdeonUk::Internal::Parser::Api::ShowtimeTest < Minitest::Test
       film_year: nil,
       language: nil,
       starting_at: Time.utc(2026, 10, 24, 17, 30),
+      title: 'Jailer 2 (Tamil)',
       variant: []
     }
 

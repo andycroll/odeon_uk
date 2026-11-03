@@ -43,6 +43,7 @@ module OdeonUk
               film_year: Cinebase::TitleSanitizer.film_year(title),
               language: language,
               starting_at: starting_at,
+              title: title,
               variant: variant
             }
           end
