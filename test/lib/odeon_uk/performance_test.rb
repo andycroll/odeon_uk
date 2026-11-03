@@ -36,6 +36,20 @@ class OdeonUk::PerformanceTest < Minitest::Test
                  performance.booking_url
   end
 
+  def test_at_names_event_from_title
+    @api_response.define_singleton_method(:showtimes) do |cinema_id, date|
+      super(cinema_id, date).tap do |data|
+        data.dig('relatedData', 'films', 0, 'title')['text'] = 'Met Opera - Eugene Onegin'
+      end
+    end
+    performance = performances_at(824).first
+
+    assert_equal 'Met Opera - Eugene Onegin', performance.title
+    assert_equal 'Eugene Onegin', performance.film_name
+    assert_equal Cinebase::Event.new(name: 'Met Opera'), performance.event
+    assert_equal %w(arts audio_described), performance.variant
+  end
+
   def test_at_parses_3d_imax
     performance = performances_at(824)[1]
 

@@ -21,7 +21,9 @@ module OdeonUk
           'Autism Friendly Screening -', # autism screening
           /\(encore.+\)/i,               # encore for NT Live
           /\(live\)/i,                   # live in brackets
-          'Autism Friendly - '           # autism friendly
+          'Autism Friendly - ',          # autism friendly
+          /\AODEON Pride Nights\s*-\s*/, # pride season
+          /\ACharity Screening\s*-\s*/   # charity screening
         ] + COMMON_REMOVE
       end
 

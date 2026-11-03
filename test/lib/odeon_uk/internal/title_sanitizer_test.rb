@@ -14,7 +14,7 @@ class OdeonUk::Internal::TitleSanitizerTest < Minitest::Test
   end
 
   def test_bolshoi
-    assert_sanitized 'Bolshoi: Spartacus', 'Bolshoi - Spartacus (Live)'
+    assert_sanitized 'Bolshoi Ballet: Spartacus', 'Bolshoi - Spartacus (Live)'
   end
 
   def test_removes_cinemagic_prefix
@@ -35,11 +35,11 @@ class OdeonUk::Internal::TitleSanitizerTest < Minitest::Test
   end
 
   def test_nt_live
-    assert_sanitized 'National Theatre: War Horse', 'NT Live - War Horse'
+    assert_sanitized 'National Theatre Live: War Horse', 'NT Live - War Horse'
   end
 
   def test_national_theatre_encore
-    assert_sanitized 'National Theatre: Frankenstein',
+    assert_sanitized 'National Theatre Live: Frankenstein',
                      'National Theatre Live - Frankenstein (Encore Screening)'
   end
 
@@ -103,7 +103,7 @@ class OdeonUk::Internal::TitleSanitizerTest < Minitest::Test
   end
 
   def test_removes_q_and_a
-    assert_sanitized 'NAZA', 'NAZA + Q&A'
+    assert_sanitized 'Naza', 'NAZA + Q&A'
   end
 
   def test_removes_in_person_q_and_a
@@ -115,7 +115,15 @@ class OdeonUk::Internal::TitleSanitizerTest < Minitest::Test
   end
 
   def test_removes_anniversary
-    assert_sanitized 'SCREAM', 'SCREAM (30th Anniversary)'
+    assert_sanitized 'Scream', 'SCREAM (30th Anniversary)'
+  end
+
+  def test_removes_pride_nights_prefix
+    assert_sanitized 'A Wolf Among the Swans', 'ODEON Pride Nights - A Wolf Among the Swans'
+  end
+
+  def test_removes_charity_screening_prefix
+    assert_sanitized 'Inside Out', 'Charity Screening -  Inside Out'
   end
 
   def test_world_tour_is_not_capitalised
@@ -128,9 +136,13 @@ class OdeonUk::Internal::TitleSanitizerTest < Minitest::Test
       'Spider-Man: Brand New Day',
       'Hadestown: The Musical',
       'Rammstein - Live in Mexico City',
-      'Ozzy & Black Sabbath: Back to the Beginning',
-      "BTS 'ARIRANG' IN BUENOS AIRES: LIVE VIEWING"
+      'Ozzy & Black Sabbath: Back to the Beginning'
     ].each { |title| assert_sanitized title, title }
+  end
+
+  def test_title_cases_capitals
+    assert_sanitized "BTS 'Arirang' in Buenos Aires: Live Viewing",
+                     "BTS 'ARIRANG' IN BUENOS AIRES: LIVE VIEWING"
   end
 
   private
